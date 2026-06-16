@@ -1,16 +1,16 @@
 // ==========================================
-// 💡 雲端後台設定與題目資料庫（圖片已完全代碼化）
+// 💡 雲端後台設定與題目資料庫（純文字安全版）
 // ==========================================
 
 const BACKEND_URL = "";
 
-// 關卡二：粽子估價王（使用 Base64 內嵌畫布，徹底繞過所有檔案讀取與問號問題）
+// 關卡二：粽子估價王（已徹底移除圖片代碼，改用純文字安全機制，100% 不卡死）
 const stage2Questions = [
-  { id: 1, name: "【老協珍】鮑魚干貝粽 (2入)", options: ["NT$ 799", "NT$ 999", "NT$ 1199"], ans: 1, img: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='200' viewBox='0 0 300 200'><rect width='100%' height='100%' fill='%23f1f8e9'/><text x='50%' y='40%' font-size='18' font-weight='bold' fill='%232e7d32' text-anchor='middle'>【老協珍】</text><text x='50%' y='65%' font-size='14' fill='%23558b2f' text-anchor='middle'>精選干貝與頂級鮑魚粽</text></svg>" },
-  { id: 2, name: "【星巴克】粽夏時光禮盒 (8入)", options: ["NT$ 520", "NT$ 600", "NT$ 720"], ans: 1, img: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='200' viewBox='0 0 300 200'><rect width='100%' height='100%' fill='%23e0f2f1'/><text x='50%' y='40%' font-size='18' font-weight='bold' fill='%2300695c' text-anchor='middle'>【星巴克】</text><text x='50%' y='65%' font-size='14' fill='%2300796b' text-anchor='middle'>星冰粽與端午夏日風味</text></svg>" },
-  { id: 3, name: "【新東陽】多穀養生素粽 (全素 5入)", options: ["NT$ 350", "NT$ 450", "NT$ 550"], ans: 1, img: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='200' viewBox='0 0 300 200'><rect width='100%' height='100%' fill='%23fff3e0'/><text x='50%' y='40%' font-size='18' font-weight='bold' fill='%23e65100' text-anchor='middle'>【新東陽】</text><text x='50%' y='65%' font-size='14' fill='%23f57c00' text-anchor='middle'>多穀養生、健康素粽</text></svg>" },
-  { id: 4, name: "【鼎泰豐】湖州鮮肉粽禮盒(5入)", options: ["NT$ 450", "NT$ 550", "NT$ 650"], ans: 1, img: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='200' viewBox='0 0 300 200'><rect width='100%' height='100%' fill='%23efebe9'/><text x='50%' y='40%' font-size='18' font-weight='bold' fill='%234e342e' text-anchor='middle'>【鼎泰豐】</text><text x='50%' y='65%' font-size='14' fill='%236d4c41' text-anchor='middle'>經典名店、湖州鮮肉粽</text></svg>" },
-  { id: 5, name: "【黑橋牌】府城廟口粽禮盒 (8入)", options: ["NT$ 730", "NT$ 830", "NT$ 930"], ans: 1, img: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='200' viewBox='0 0 300 200'><rect width='100%' height='100%' fill='%23fce4ec'/><text x='50%' y='40%' font-size='18' font-weight='bold' fill='%c2185b' text-anchor='middle'>【黑橋牌】</text><text x='50%' y='65%' font-size='14' fill='%d81b60' text-anchor='middle'>正宗府城古早味廟口粽</text></svg>" }
+  { id: 1, name: "【老協珍】鮑魚干貝粽 (2入)", options: ["NT$ 799", "NT$ 999", "NT$ 1199"], ans: 1 },
+  { id: 2, name: "【星巴克】粽夏時光禮盒 (8入)", options: ["NT$ 520", "NT$ 600", "NT$ 720"], ans: 1 },
+  { id: 3, name: "【新東陽】多穀養生素粽 (全素 5入)", options: ["NT$ 350", "NT$ 450", "NT$ 550"], ans: 1 },
+  { id: 4, name: "【鼎泰豐】湖州鮮肉粽禮盒(5入)", options: ["NT$ 450", "NT$ 550", "NT$ 650"], ans: 1 },
+  { id: 5, name: "【黑橋牌】府城廟口粽禮盒 (8入)", options: ["NT$ 730", "NT$ 830", "NT$ 930"], ans: 1 }
 ];
 
 // 關卡三：趣味問答題庫
@@ -44,14 +44,19 @@ let isAllowClick = true;
 
 function showScreen(id) {
   ['start-screen', 'game-stage1', 'leaderboard-screen', 'game-stage2', 'game-stage3', 'result-screen'].forEach(s => {
-    document.getElementById(s).classList.add('hide');
+    const el = document.getElementById(s);
+    if(el) el.classList.add('hide');
   });
-  document.getElementById(id).classList.remove('hide');
+  const target = document.getElementById(id);
+  if(target) target.classList.remove('hide');
 }
 
 function startGame() {
   const input = document.getElementById('player-name').value.trim();
-  if(!input) return alert('請輸入您的姓名才能開始比賽！');
+  if(!input) {
+    alert('請輸入您的姓名才能開始比賽！');
+    return;
+  }
   pName = input;
   showScreen('game-stage1');
   initStage1();
@@ -68,6 +73,7 @@ let s1Interval, spawnInterval, gameLoopId;
 
 function initStage1() {
   canvas = document.getElementById('gameCanvas');
+  if(!canvas) return;
   ctx = canvas.getContext('2d');
   
   function handleMove(e) {
@@ -86,7 +92,8 @@ function initStage1() {
 
   s1Interval = setInterval(() => {
     s1Timer--;
-    document.getElementById('timer1').innerText = `⏱️ 剩餘時間: ${s1Timer} 秒`;
+    const tEl = document.getElementById('timer1');
+    if(tEl) tEl.innerText = `⏱️ 剩餘時間: ${s1Timer} 秒`;
     if(s1Timer <= 0) endStage1();
   }, 1000);
 
@@ -108,6 +115,7 @@ function initStage1() {
 }
 
 function gameLoop() {
+  if(!ctx) return;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   
   ctx.strokeStyle = '#b3e5fc';
@@ -150,7 +158,8 @@ function gameLoop() {
       else if (item.type === 'sauce') s1Score = Math.max(0, s1Score - 10); 
       else if (item.type === 'stone') s1Score = Math.max(0, s1Score - 20); 
       
-      document.getElementById('score1').innerText = `得分: ${s1Score}`;
+      const scEl = document.getElementById('score1');
+      if(scEl) scEl.innerText = `得分: ${s1Score}`;
       items.splice(i, 1);
       continue;
     }
@@ -191,13 +200,16 @@ function goToNextStage() {
 }
 
 // ------------------------------------------
-// 第二關：粽子估價王
+// 第二關：粽子估價王（純文字安全版邏輯）
 // ------------------------------------------
 function initStage2() {
   const q = stage2Questions[s2CurrentIdx];
   document.getElementById('stage2-title').innerText = `第 ${s2CurrentIdx + 1} / 5 題`;
   document.getElementById('stage2-name').innerText = q.name;
-  document.getElementById('stage2-img').src = q.img;
+  
+  // 安全修正：隱藏原本的 <img> 標籤，改顯示一個純文字的精美外框
+  const imgTag = document.getElementById('stage2-img');
+  if(imgTag) imgTag.style.display = 'none';
   
   let optionsHtml = "";
   q.options.forEach((opt, idx) => {
@@ -234,7 +246,7 @@ function checkStage2Answer(chosenIdx) {
 }
 
 // ------------------------------------------
-// 第三關：端午趣味答題（50 秒）
+// 第三關：端午趣味答題
 // ------------------------------------------
 let s3Timer = 50; 
 let s3Interval;
@@ -242,7 +254,8 @@ let s3Interval;
 function initStage3() {
   s3Interval = setInterval(() => {
     s3Timer--;
-    document.getElementById('timer3').innerText = `⏱️ 剩餘時間: ${s3Timer} 秒`;
+    const t3El = document.getElementById('timer3');
+    if(t3El) t3El.innerText = `⏱️ 剩餘時間: ${s3Timer} 秒`;
     if(s3Timer <= 0) endStage3();
   }, 1000);
   renderStage3Question();
