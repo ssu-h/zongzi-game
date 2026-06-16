@@ -24,7 +24,7 @@
       </div>
     </div>
 
-    <div id="game-stage1" class="stage-screen hide" style="display: none;">
+    <div id="game-stage1" class="stage-screen hide">
       <div class="stage-header">
         <span class="stage-badge">關卡一：龍舟接粽</span>
         <div class="status-bar">
@@ -41,7 +41,7 @@
       </div>
     </div>
 
-    <div id="leaderboard-screen" class="stage-screen hide" style="display: none;">
+    <div id="leaderboard-screen" class="stage-screen hide">
       <div class="welcome-box">
         <h2 id="leaderboard-title">關卡結束</h2>
         <div class="score-display">
@@ -59,27 +59,27 @@
       </div>
     </div>
 
-    <div id="game-stage2" class="stage-screen hide" style="display: none;">
+    <div id="game-stage2" class="stage-screen hide">
       <div class="stage-header">
         <span class="stage-badge">關卡二：粽子估價王</span>
         <h2 id="stage2-title" class="stage-timer">第 1 / 5 題</h2>
       </div>
       
-      <div class="game-container" style="width: 100%; max-width: 400px; text-align: center;">
-        <h3 id="stage2-name" class="product-name" style="font-size: 20px; margin: 10px 0; color: #2c3e50;">載入中...</h3>
+      <div class="game-container flex-container">
+        <h3 id="stage2-name" class="product-name">商品載入中...</h3>
         
-        <div class="image-frame" style="width: 100%; max-width: 260px; margin: 0 auto;">
-          <img id="stage2-img" src="./laoxiezhen.jpg" alt="粽子商品圖" style="width: 100%; height: 180px; object-fit: cover; border-radius: 8px;">
+        <div class="image-frame">
+          <img id="stage2-img" src="laoxiezhen.jpg" alt="粽子商品圖">
         </div>
         
-        <p class="hint-text" style="color: #7f8c8d; font-size: 14px; margin-top: 12px; font-weight: bold;">請選擇這組粽子的官方新台幣售價：</p>
+        <p class="hint-text-s2">請選擇這組粽子的官方新台幣售價：</p>
         
-        <div id="stage2-options" class="options-container" style="width: 100%; margin-top: 10px;">
+        <div id="stage2-options" class="options-container">
           </div>
       </div>
     </div>
 
-    <div id="game-stage3" class="stage-screen hide" style="display: none;">
+    <div id="game-stage3" class="stage-screen hide">
       <div class="stage-header">
         <span class="stage-badge">關卡三：端午趣味答題</span>
         <div class="status-bar">
@@ -87,28 +87,28 @@
         </div>
       </div>
       
-      <div class="game-container" style="width: 100%; max-width: 400px; text-align: center;">
-        <h2 id="stage3-title" style="font-size: 18px; color: #16a085;">第 1 / 10 題</h2>
-        <h3 id="stage3-question" class="question-text" style="font-size: 20px; margin: 15px 0; color: #2c3e50; line-height: 1.4;">題目載入中...</h3>
+      <div class="game-container flex-container">
+        <h2 id="stage3-title" class="stage-q-num">第 1 / 10 題</h2>
+        <h3 id="stage3-question" class="question-text">題目載入中...</h3>
         
-        <div id="stage3-options" class="options-container" style="width: 100%; margin-top: 15px;">
+        <div id="stage3-options" class="options-container">
           </div>
       </div>
     </div>
 
-    <div id="result-screen" class="stage-screen hide" style="display: none;">
+    <div id="result-screen" class="stage-screen hide">
       <div class="welcome-box">
         <h1>🎉 全關卡挑戰成功！ 🎉</h1>
         <h2 id="result-welcome">🎖️ 挑戰大俠：</h2>
         
         <div class="score-display">
           <p>您最終獲得的端午爭霸總分：</p>
-          <span id="res-final-total" class="total-number" style="color: #27ae60;">0</span>
+          <span id="res-final-total" class="total-number">0</span><span> 分</span>
         </div>
         
-        <div class="rank-zone" style="width: 100%;">
+        <div class="rank-zone">
           <h3>👑 端午至高榮譽榜</h3>
-          <div id="final-rank-list" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+          <div id="final-rank-list">
             </div>
         </div>
         
