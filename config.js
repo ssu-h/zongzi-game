@@ -1,46 +1,16 @@
 // ==========================================
-// 💡 雲端後台設定與題目資料庫（圖片完美流暢版）
+// 💡 雲端後台設定與題目資料庫（萬用相容版）
 // ==========================================
 
 const BACKEND_URL = "";
 
-// 關卡二：粽子估價王（改用高畫質公開圖庫，100% 正常顯示圖片且絕對不卡死）
+// 關卡二：粽子估價王（使用相對路徑，並確保大小寫與副檔名對齊）
 const stage2Questions = [
-  { 
-    id: 1, 
-    name: "【老協珍】鮑魚干貝粽 (2入)", 
-    options: ["NT$ 799", "NT$ 999", "NT$ 1199"], 
-    ans: 1, 
-    img: "https://images.unsplash.com/photo-1628031023194-e8c1ea9825b4?w=500&auto=format&fit=crop&q=60" 
-  },
-  { 
-    id: 2, 
-    name: "【星巴克】粽夏時光禮盒 (8入)", 
-    options: ["NT$ 520", "NT$ 600", "NT$ 720"], 
-    ans: 1, 
-    img: "https://images.unsplash.com/photo-1544816155-12df9643f363?w=500&auto=format&fit=crop&q=60" 
-  },
-  { 
-    id: 3, 
-    name: "【新東陽】多穀養生素粽 (全素 5入)", 
-    options: ["NT$ 350", "NT$ 450", "NT$ 550"], 
-    ans: 1, 
-    img: "https://images.unsplash.com/photo-1608686207856-001b95cf60ca?w=500&auto=format&fit=crop&q=60" 
-  },
-  { 
-    id: 4, 
-    name: "【鼎泰豐】湖州鮮肉粽禮盒(5入)", 
-    options: ["NT$ 450", "NT$ 550", "NT$ 650"], 
-    ans: 1, 
-    img: "https://images.unsplash.com/photo-1511018556340-d16986a1c194?w=500&auto=format&fit=crop&q=60" 
-  },
-  { 
-    id: 5, 
-    name: "【黑橋牌】府城廟口粽禮盒 (8入)", 
-    options: ["NT$ 730", "NT$ 830", "NT$ 930"], 
-    ans: 1, 
-    img: "https://images.unsplash.com/photo-1612240498936-65f5101365d2?w=500&auto=format&fit=crop&q=60" 
-  }
+  { id: 1, name: "【老協珍】鮑魚干貝粽 (2入)", options: ["NT$ 799", "NT$ 999", "NT$ 1199"], ans: 1, img: "./老協珍.jpg" },
+  { id: 2, name: "【星巴克】粽夏時光禮盒 (8入)", options: ["NT$ 520", "NT$ 600", "NT$ 720"], ans: 1, img: "./星巴克.jpg" },
+  { id: 3, name: "【新東陽】多穀養生素粽 (全素 5入)", options: ["NT$ 350", "NT$ 450", "NT$ 550"], ans: 1, img: "./新東陽.jpeg" },
+  { id: 4, name: "【鼎泰豐】湖州鮮肉粽禮盒(5入)", options: ["NT$ 450", "NT$ 550", "NT$ 650"], ans: 1, img: "./鼎泰豐.jpeg" },
+  { id: 5, name: "【黑橋牌】府城廟口粽禮盒 (8入)", options: ["NT$ 730", "NT$ 830", "NT$ 930"], ans: 1, img: "./黑橋牌.jpg" }
 ];
 
 // 關卡三：趣味問答題庫
@@ -72,13 +42,30 @@ let s2CurrentIdx = 0;
 let s3CurrentIdx = 0;
 let isAllowClick = true; 
 
+// 💡 終極修正：不管是寫 class="card" 還是 class="screen"，全部強制隱藏與顯示
 function showScreen(id) {
-  ['start-screen', 'game-stage1', 'leaderboard-screen', 'game-stage2', 'game-stage3', 'result-screen'].forEach(s => {
+  const screens = ['start-screen', 'game-stage1', 'leaderboard-screen', 'game-stage2', 'game-stage3', 'result-screen'];
+  
+  screens.forEach(s => {
     const el = document.getElementById(s);
-    if(el) el.classList.add('hide');
+    if (el) {
+      el.classList.add('hide');
+      // 確保有些 CSS 沒寫好的情況下，直接用 style 控制最保險
+      el.style.display = 'none'; 
+    }
   });
+  
   const target = document.getElementById(id);
-  if(target) target.classList.remove('hide');
+  if (target) {
+    target.classList.remove('hide');
+    // 如果是第一關遊戲，用 block；其他畫面用彈性布局或區塊布局顯示
+    target.style.display = (id === 'game-stage1') ? 'block' : 'flex';
+    
+    // 如果您的 CSS 裡面 card 預設是用 block 顯示，下面這行可以確保樣式正常
+    if (target.classList.contains('card')) {
+      target.style.display = 'block';
+    }
+  }
 }
 
 function startGame() {
@@ -211,7 +198,7 @@ function showLeaderboardPage(titleText) {
   document.getElementById('leaderboard-title').innerText = titleText;
   document.getElementById('current-user-total').innerText = userTotalScore;
   
-  let html = `<div class="rank-item" style="background: rgba(231, 76, 60, 0.15); font-weight: bold; border-radius:6px;">
+  let html = `<div class="rank-item" style="background: rgba(231, 76, 60, 0.15); font-weight: bold; border-radius:6px; padding: 10px; margin: 10px 0; display: flex; justify-content: space-between;">
                 <span>⭐ ${pName} (您)</span>
                 <span>${userTotalScore} 分</span>
               </div>`;
@@ -230,7 +217,7 @@ function goToNextStage() {
 }
 
 // ------------------------------------------
-// 第二關：粽子估價王（高畫質圖片穩定版）
+// 第二關：粽子估價王
 // ------------------------------------------
 function initStage2() {
   const q = stage2Questions[s2CurrentIdx];
@@ -239,13 +226,12 @@ function initStage2() {
   
   const imgTag = document.getElementById('stage2-img');
   if(imgTag) {
-    imgTag.style.display = 'block'; // 確保圖片標籤顯示
-    imgTag.src = q.img;            // 帶入安全圖庫網址
+    imgTag.src = q.img; // 自動塞入正確路徑
   }
   
   let optionsHtml = "";
   q.options.forEach((opt, idx) => {
-    optionsHtml += `<button class="choice-btn" id="s2-opt-${idx}" onclick="checkStage2Answer(${idx})">${idx + 1}. ${opt}</button>`;
+    optionsHtml += `<button class="choice-btn" id="s2-opt-${idx}" onclick="checkStage2Answer(${idx})" style="width:100%; padding:10px; margin:5px 0; border-radius:6px; border:1px solid #ccc; background:#fff; font-size:16px;">${idx + 1}. ${opt}</button>`;
   });
   document.getElementById('stage2-options').innerHTML = optionsHtml;
   isAllowClick = true;
@@ -259,8 +245,13 @@ function checkStage2Answer(chosenIdx) {
   const buttons = document.querySelectorAll('#stage2-options .choice-btn');
   
   buttons.forEach((btn, idx) => {
-    if (idx === q.ans) btn.classList.add('correct'); 
-    else if (idx === chosenIdx) btn.classList.add('wrong');   
+    if (idx === q.ans) {
+      btn.style.background = '#2ecc71'; // 正確綠色
+      btn.style.color = '#fff';
+    } else if (idx === chosenIdx) {
+      btn.style.background = '#e74c3c'; // 錯誤紅色
+      btn.style.color = '#fff';
+    }   
   });
 
   if(chosenIdx === q.ans) s2Score += 40; 
@@ -304,7 +295,7 @@ function renderStage3Question() {
   
   let optionsHtml = "";
   q.options.forEach((opt, idx) => {
-    optionsHtml += `<button class="choice-btn" id="s3-opt-${idx}" onclick="checkStage3Answer(${idx})">${idx + 1}. ${opt}</button>`;
+    optionsHtml += `<button class="choice-btn" id="s3-opt-${idx}" onclick="checkStage3Answer(${idx})" style="width:100%; padding:10px; margin:5px 0; border-radius:6px; border:1px solid #ccc; background:#fff; font-size:16px;">${idx + 1}. ${opt}</button>`;
   });
   document.getElementById('stage3-options').innerHTML = optionsHtml;
   isAllowClick = true;
@@ -318,8 +309,13 @@ function checkStage3Answer(chosenIdx) {
   const buttons = document.querySelectorAll('#stage3-options .choice-btn');
   
   buttons.forEach((btn, idx) => {
-    if (idx === q.ans) btn.classList.add('correct');
-    else if (idx === chosenIdx) btn.classList.add('wrong');
+    if (idx === q.ans) {
+      btn.style.background = '#2ecc71';
+      btn.style.color = '#fff';
+    } else if (idx === chosenIdx) {
+      btn.style.background = '#e74c3c';
+      btn.style.color = '#fff';
+    }
   });
 
   if(chosenIdx === q.ans) s3CorrectCount++;
@@ -342,7 +338,7 @@ function endStage3() {
   document.getElementById('res-final-total').innerText = userTotalScore + " 分";
   
   document.getElementById('final-rank-list').innerHTML = `
-    <div class="rank-item" style="background: rgba(46, 204, 113, 0.15); font-weight: bold; border-radius: 6px; padding: 15px; margin-bottom: 10px;">
+    <div class="rank-item" style="background: rgba(46, 204, 113, 0.15); font-weight: bold; border-radius: 6px; padding: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
       <span>🏆 您的最終榮譽總分</span>
       <span style="font-size: 22px; color: #27ae60;">${userTotalScore} 分</span>
     </div>
