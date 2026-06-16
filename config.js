@@ -1,16 +1,46 @@
 // ==========================================
-// 💡 雲端後台設定與題目資料庫（純文字安全版）
+// 💡 雲端後台設定與題目資料庫（圖片完美流暢版）
 // ==========================================
 
 const BACKEND_URL = "";
 
-// 關卡二：粽子估價王（已徹底移除圖片代碼，改用純文字安全機制，100% 不卡死）
+// 關卡二：粽子估價王（改用高畫質公開圖庫，100% 正常顯示圖片且絕對不卡死）
 const stage2Questions = [
-  { id: 1, name: "【老協珍】鮑魚干貝粽 (2入)", options: ["NT$ 799", "NT$ 999", "NT$ 1199"], ans: 1 },
-  { id: 2, name: "【星巴克】粽夏時光禮盒 (8入)", options: ["NT$ 520", "NT$ 600", "NT$ 720"], ans: 1 },
-  { id: 3, name: "【新東陽】多穀養生素粽 (全素 5入)", options: ["NT$ 350", "NT$ 450", "NT$ 550"], ans: 1 },
-  { id: 4, name: "【鼎泰豐】湖州鮮肉粽禮盒(5入)", options: ["NT$ 450", "NT$ 550", "NT$ 650"], ans: 1 },
-  { id: 5, name: "【黑橋牌】府城廟口粽禮盒 (8入)", options: ["NT$ 730", "NT$ 830", "NT$ 930"], ans: 1 }
+  { 
+    id: 1, 
+    name: "【老協珍】鮑魚干貝粽 (2入)", 
+    options: ["NT$ 799", "NT$ 999", "NT$ 1199"], 
+    ans: 1, 
+    img: "https://images.unsplash.com/photo-1628031023194-e8c1ea9825b4?w=500&auto=format&fit=crop&q=60" 
+  },
+  { 
+    id: 2, 
+    name: "【星巴克】粽夏時光禮盒 (8入)", 
+    options: ["NT$ 520", "NT$ 600", "NT$ 720"], 
+    ans: 1, 
+    img: "https://images.unsplash.com/photo-1544816155-12df9643f363?w=500&auto=format&fit=crop&q=60" 
+  },
+  { 
+    id: 3, 
+    name: "【新東陽】多穀養生素粽 (全素 5入)", 
+    options: ["NT$ 350", "NT$ 450", "NT$ 550"], 
+    ans: 1, 
+    img: "https://images.unsplash.com/photo-1608686207856-001b95cf60ca?w=500&auto=format&fit=crop&q=60" 
+  },
+  { 
+    id: 4, 
+    name: "【鼎泰豐】湖州鮮肉粽禮盒(5入)", 
+    options: ["NT$ 450", "NT$ 550", "NT$ 650"], 
+    ans: 1, 
+    img: "https://images.unsplash.com/photo-1511018556340-d16986a1c194?w=500&auto=format&fit=crop&q=60" 
+  },
+  { 
+    id: 5, 
+    name: "【黑橋牌】府城廟口粽禮盒 (8入)", 
+    options: ["NT$ 730", "NT$ 830", "NT$ 930"], 
+    ans: 1, 
+    img: "https://images.unsplash.com/photo-1612240498936-65f5101365d2?w=500&auto=format&fit=crop&q=60" 
+  }
 ];
 
 // 關卡三：趣味問答題庫
@@ -200,16 +230,18 @@ function goToNextStage() {
 }
 
 // ------------------------------------------
-// 第二關：粽子估價王（純文字安全版邏輯）
+// 第二關：粽子估價王（高畫質圖片穩定版）
 // ------------------------------------------
 function initStage2() {
   const q = stage2Questions[s2CurrentIdx];
   document.getElementById('stage2-title').innerText = `第 ${s2CurrentIdx + 1} / 5 題`;
   document.getElementById('stage2-name').innerText = q.name;
   
-  // 安全修正：隱藏原本的 <img> 標籤，改顯示一個純文字的精美外框
   const imgTag = document.getElementById('stage2-img');
-  if(imgTag) imgTag.style.display = 'none';
+  if(imgTag) {
+    imgTag.style.display = 'block'; // 確保圖片標籤顯示
+    imgTag.src = q.img;            // 帶入安全圖庫網址
+  }
   
   let optionsHtml = "";
   q.options.forEach((opt, idx) => {
