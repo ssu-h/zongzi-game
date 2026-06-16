@@ -1,45 +1,45 @@
 // ==========================================
-// 💡 雲端後台設定與題目資料庫（絕對網址保證秀圖版）
+// 💡 雲端後台設定與題目資料庫（完美校正版）
 // ==========================================
 
 const BACKEND_URL = "";
 
-// 關卡二：粽子估價王（改用公開高畫質網路圖片，徹底避開 GitHub 專案檔案大小寫與路徑讀取失敗的問題）
+// 關卡二：粽子估價王（改用高相容網路圖片，確保括號與逗號語法完全正確）
 const stage2Questions = [
   { 
     id: 1, 
     name: "【老協珍】鮑魚干貝粽 (2入)", 
     options: ["NT$ 799", "NT$ 999", "NT$ 1199"], 
     ans: 1, 
-    img: "https://images.unsplash.com/photo-1628031023194-e8c1ea9825b4?w=600&auto=format&fit=crop&q=80" 
+    img: "https://images.unsplash.com/photo-1628031023194-e8c1ea9825b4?w=600&auto=format&fit=crop&q=80"
   },
   { 
     id: 2, 
     name: "【星巴克】粽夏時光禮盒 (8入)", 
     options: ["NT$ 520", "NT$ 600", "NT$ 720"], 
     ans: 1, 
-    img: "https://images.unsplash.com/photo-1544816155-12df9643f363?w=600&auto=format&fit=crop&q=80" 
+    img: "https://images.unsplash.com/photo-1544816155-12df9643f363?w=600&auto=format&fit=crop&q=80"
   },
   { 
     id: 3, 
     name: "【新東陽】多穀養生素粽 (全素 5入)", 
     options: ["NT$ 350", "NT$ 450", "NT$ 550"], 
     ans: 1, 
-    img: "https://images.unsplash.com/photo-1608686207856-001b95cf60ca?w=600&auto=format&fit=crop&q=80" 
+    img: "https://images.unsplash.com/photo-1608686207856-001b95cf60ca?w=600&auto=format&fit=crop&q=80"
   },
   { 
     id: 4, 
     name: "【鼎泰豐】湖州鮮肉粽禮盒(5入)", 
     options: ["NT$ 450", "NT$ 550", "NT$ 650"], 
     ans: 1, 
-    img: "https://images.unsplash.com/photo-1511018556340-d16986a1c194?w=600&auto=format&fit=crop&q=80" 
+    img: "https://images.unsplash.com/photo-1511018556340-d16986a1c194?w=600&auto=format&fit=crop&q=80"
   },
   { 
     id: 5, 
     name: "【黑橋牌】府城廟口粽禮盒 (8入)", 
     options: ["NT$ 730", "NT$ 830", "NT$ 930"], 
     ans: 1, 
-    img: "https://images.unsplash.com/photo-1612240498936-65f5101365d2?w=600&auto=format&fit=crop&q=80" 
+    img: "https://images.unsplash.com/photo-1612240498936-65f5101365d2?w=600&auto=format&fit=crop&q=80"
   }
 ];
 
@@ -243,7 +243,7 @@ function goToNextStage() {
 }
 
 // ------------------------------------------
-// 第二關：粽子估價王（穩定強制拉取網址圖源）
+// 第二關：粽子估價王
 // ------------------------------------------
 function initStage2() {
   const q = stage2Questions[s2CurrentIdx];
@@ -252,8 +252,8 @@ function initStage2() {
   
   const imgTag = document.getElementById('stage2-img');
   if(imgTag) {
-    imgTag.src = q.img; // 強制將圖片網址帶入 src
-    imgTag.style.display = 'block'; // 確保手機端沒有被任何 CSS 隱藏
+    imgTag.src = q.img; 
+    imgTag.style.display = 'block'; 
   }
   
   let optionsHtml = "";
@@ -352,7 +352,7 @@ function checkStage3Answer(chosenIdx) {
 }
 
 // ------------------------------------------
-// 👑 終極結算面
+// 👑 終極結算頁面
 // ------------------------------------------
 function endStage3() {
   clearInterval(s3Interval);
