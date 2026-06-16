@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <title>👑 主持人戰略主控台 👑</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script src="config.js"></script>
+</head>
+<body class="admin-body">
+
+  <div class="container" style="max-width: 650px;">
+    <div class="card admin-card">
+      <div class="title-banner" style="color:var(--secondary)">👑 一粽值千金 控制台</div>
+      <p>控制現場大螢幕與所有玩家的手機同步狀態</p>
+      <hr style="border-color: #444;">
+      
+      <div style="font-size: 22px; color: #ffc107; margin: 15px 0;" id="current-state">目前狀態：初始化中...</div>
+      <div style="font-size: 18px; color: #5ad45a; margin-bottom: 20px;" id="submit-count">當前收到答案：0 人</div>
+      
+      <hr style="border-color: #444;">
+      
+      <h3 style="color:#fff;">第一步：發送題目</h3>
+      <div class="admin-btn-group">
+        <button class="btn-orange" onclick="launchQuestion(1)">🎯 發送第一題</button>
+        <button class="btn-orange" onclick="launchQuestion(2)">🎯 發送第二題</button>
+        <button class="btn-orange" onclick="launchQuestion(3)">🎯 發送第三題</button>
+      </div>
+      
+      <h3 style="color:#fff;">第二步：揭曉開獎</h3>
+      <button class="btn-green" style="margin-bottom: 25px;" onclick="revealAnswer()">📢 公布正確答案與結算積分</button>
+
+      <div id="mvp-box" class="hide" style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; color: #56ff56; font-size: 18px; border: 1px solid var(--secondary);"></div>
+      
+      <hr style="border-color: #444; margin-top: 30px;">
+      <button class="btn-red" style="font-size:14px; padding:8px;" onclick="resetWholeGame()">🔄 重置整場遊戲數據 (慎用)</button>
+    </div>
+  </div>
+
+  <script>
+    let activeQId = 0;
+    let answerListener = null;
+
+    // 確保初始化狀態
+    db.collection("gameStatus").doc("current").set({ status: "waiting", questionId: 0 }, { merge: true });
+    document.getElementById('current-state').innerText = "目前狀態：等待開局";
+
+    function launchQuestion(qId) {
+      activeQId = qId;
+      document.getElementById('mvp-box').classList.add('hide');
+      
+      db.collection("gameStatus").doc("current").set({
+        status: "playing",
+        questionId: qId
+      }).then(() => {
+        document.getElementById('current-state').innerText = `🔥 第 ${qId} 題 激烈作答中...`;
+        trackIncomingAnswers(qId);
+      });
+    }
+
+    function trackIncomingAnswers(qId) {
+      if (answerListener) answerListener(); // 釋放舊的監聽
+      answerListener = db.collection("answers").where("questionId", "==", qId)
+        .onSnapshot((snapshot) => {
+          document.getElementById('submit-count').innerText = `當前收到答案：${snapshot.size} 人`;
+        });
+    }
+
+    function revealAnswer() {
+      if (activeQId === 0) return alert('目前沒有正在進行的題目！');
+      const q = questions.find(item => item.id === activeQId);
+      
+      db.collection("answers").where("questionId", "==", activeQId).get().then((snapshot) => {
+        let mvpUser = "無人作答";
+        let minDiff = Infinity;
+        let mvpGuess = 0;
+        let batch = db.batch();
+
+        snapshot.forEach((doc) => {
+          const ans = doc.data();
+          let diff = Math.abs(ans.guess - q.price);
+          
+          if (diff < minDiff) {
+            minDiff = diff;
+            mvpUser = ans.player;
+            mvpGuess = ans.guess;
+          }
+
+          // 同步累加玩家的總誤差分數
+          const playerRef = db.collection("players").doc(ans.player);
+          batch.set(playerRef, {
+            totalError: firebase.firestore.FieldValue.increment(diff)
+          }, { merge: true });
+        });
+
+        batch.commit().then(() => {
+          // 命令所有人手機端切換到開獎排行頁
+          db.collection("gameStatus").doc("current").set({
+            status: "reveal",
+            questionId: activeQId
+          });
+
+          document.getElementById('current-state').innerText = `📊 第 ${activeQId} 題 答案已公布！`;
+          
+          const mvpBox = document.getElementById('mvp-box');
+          mvpBox.classList.remove('hide');
+          if (minDiff !== Infinity) {
+            mvpBox.innerHTML = `🏆 <b>本題神準 MVP：</b> <span style="color:#fff">${mvpUser}</span><br>正確答案 ${q.price} 元，盲猜 ${mvpGuess} 元 (僅差 ${minDiff} 元！ 🎉)`;
+          } else {
+            mvpBox.innerHTML = `本題無人提交答案 😢`;
+          }
+        });
+      });
+    }
+
+    function resetWholeGame() {
+      if (!confirm("確定要將整場遊戲資料重置嗎？這將會清除所有排行分數！")) return;
+      
+      db.collection("gameStatus").doc("current").set({ status: "waiting", questionId: 0 });
+      document.getElementById('current-state').innerText = "目前狀態：遊戲已重置";
+      document.getElementById('submit-count').innerText = "當前收到答案：0 人";
+      document.getElementById('mvp-box').classList.add('hide');
+      activeQId = 0;
+      
+      alert("核心狀態已重設！為確保排行榜乾淨，建議至 Firebase Console 點擊 players 與 answers 資料夾進行手動刪除清空。");
+    }
+  </script>
+</body>
+</html>

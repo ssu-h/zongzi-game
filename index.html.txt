@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🎋 一粽值千金 🎋</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script src="config.js"></script>
+</head>
+<body>
+
+  <div class="container">
+    
+    <div id="login-page" class="card">
+      <div class="title-banner">🎋 一粽值千金 🎋</div>
+      <p>現場互動估價遊戲！請輸入姓名加入戰局：</p>
+      <input type="text" id="username" placeholder="請輸入您的真實姓名">
+      <button onclick="joinGame()">進入遊戲房間</button>
+    </div>
+
+    <div id="wait-page" class="card hide">
+      <div class="title-banner">歡迎入場</div>
+      <h2 id="player-welcome" style="color:var(--secondary)"></h2>
+      <div class="status-msg">☕ 請抬頭看大螢幕，靜候主持人開始題目...</div>
+    </div>
+
+    <div id="game-page" class="card hide">
+      <h3 id="q-title">第 X 題</h3>
+      <div class="img-box"><img id="q-img" src="" alt="粽子"></div>
+      <h2 id="q-name">肉粽名稱加载中...</h2>
+      
+      <div id="answer-zone">
+        <p style="font-weight: bold;">請盲猜這顆粽子的官方新台幣售價：</p>
+        <input type="number" id="guess-price" placeholder="NT$ 輸入價格">
+        <button id="submit-btn" onclick="submitAnswer()">確認送出（限一次）</button>
+      </div>
+      <div id="lock-zone" class="status-msg hide">🔒 答案已鎖定！請盯緊大螢幕等待公布正解...</div>
+    </div>
+
+    <div id="result-page" class="card hide">
+      <div class="title-banner">📊 本題結算</div>
+      <div style="font-size: 18px; margin: 15px 0; background: #fafafa; padding: 15px; border-radius: 10px;">
+        <p>正確答案：<strong style="color:var(--accent); font-size:24px;" id="ans-correct">0</strong> 元</p>
+        <p>您的答案：<strong id="ans-user" style="color:var(--primary)">0</strong> 元</p>
+        <p>兩者差距：<strong id="ans-diff" style="color:#e67e22">0</strong> 元</p>
+      </div>
+      <hr style="border: 0; border-top: 1px solid #eee;">
+      <h3 style="margin-top: 15px;">🏆 即時總排行榜 (前10名)</h3>
+      <div id="leaderboard" class="rank-list"></div>
+    </div>
+
+  </div>
+
+  <script>
+    let playerName = "";
+    let currentQId = 0;
+
+    // 自動檢查是否曾登入過
+    if (localStorage.getItem('zongzi_user')) {
+      playerName = localStorage.getItem('zongzi_user');
+      enterWaitingRoom();
+    }
+
+    function joinGame() {
+      const inputName = document.getElementById('username').value.trim();
+      if (!inputName) return alert('請填寫名字才能參賽喔！');
+      playerName = inputName;
+      localStorage.setItem('zongzi_user', playerName);
+      
+      // 在全球玩家庫中註冊/更新狀態
+      db.collection("players").doc(playerName).set({
+        name: playerName,
+        totalError: 0,
+        lastActive: Date.now()
+      }, { merge: true });
+
+      enterWaitingRoom();
+    }
+
+    function enterWaitingRoom() {
+      showPage('wait-page');
+      document.getElementById('player-welcome').innerText = `參賽大俠：${playerName}`;
+      listenToGameCore();
+    }
+
+    function showPage(id) {
+      ['login-page', 'wait-page', 'game-page', 'result-page'].forEach(p => {
+        document.getElementById(p).classList.add('hide');
+      });
+      document.getElementById(id).classList.remove('hide');
+    }
+
+    // 實時監聽主持人的控制狀態
+    function listenToGameCore() {
+      db.collection("gameStatus").doc("current").onSnapshot((doc) => {
+        if (!doc.exists()) return;
+        const state = doc.data();
+        currentQId = state.questionId;
+        
+        if (state.status === "waiting") {
+          showPage('wait-page');
+        } else if (state.status === "playing") {
+          const q = questions.find(item => item.id === currentQId);
+          if (!q) return;
+          
+          document.getElementById('q-title').innerText = `🔥 第 ${q.id} 題`;
+          document.getElementById('q-name').innerText = q.name;
+          document.getElementById('q-img').src = q.img;
+          document.getElementById('guess-price').value = "";
+          document.getElementById('submit-btn').disabled = false;
+          
+          document.getElementById('answer-zone').classList.remove('hide');
+          document.getElementById('lock-zone').classList.add('hide');
+          showPage('game-page');
+        } else if (state.status === "reveal") {
+          revealResultsToPlayer();
+        }
+      });
+    }
+
+    function submitAnswer() {
+      const price = parseInt(document.getElementById('guess-price').value);
+      if (isNaN(price) || price < 0) return alert('請輸入正確的金額數字！');
+      
+      document.getElementById('submit-btn').disabled = true;
+      document.getElementById('answer-zone').classList.add('hide');
+      document.getElementById('lock-zone').classList.remove('hide');
+
+      // 將答案上傳至 Firestore 該題作答區
+      db.collection("answers").doc(`${currentQId}_${playerName}`).set({
+        player: playerName,
+        questionId: currentQId,
+        guess: price,
+        timestamp: Date.now()
+      });
+    }
+
+    function revealResultsToPlayer() {
+      const q = questions.find(item => item.id === currentQId);
+      document.getElementById('ans-correct').innerText = q.price;
+      
+      db.collection("answers").doc(`${currentQId}_${playerName}`).get().then((doc) => {
+        let userGuess = null;
+        if (doc.exists()) userGuess = doc.data().guess;
+        
+        if (userGuess !== null) {
+          let diff = Math.abs(userGuess - q.price);
+          document.getElementById('ans-user').innerText = `${userGuess} 元`;
+          document.getElementById('ans-diff').innerText = `${diff} 元`;
+        } else {
+          document.getElementById('ans-user').innerText = "未作答";
+          document.getElementById('ans-diff').innerText = `${q.price} 元 (未答懲罰)`;
+        }
+        
+        showPage('result-page');
+        renderLeaderboard();
+      });
+    }
+
+    function renderLeaderboard() {
+      db.collection("players").orderBy("totalError", "asc").limit(10).get().then((snapshot) => {
+        let html = "";
+        let i = 1;
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          let medal = i === 1 ? "🥇" : i === 2 ? "🥈" : i === 3 ? "🥉" : `${i}.`;
+          html += `<div class="rank-item"><span>${medal} ${data.name}</span><span>總誤差: ${data.totalError}元</span></div>`;
+          i++;
+        });
+        document.getElementById('leaderboard').innerHTML = html;
+      });
+    }
+  </script>
+</body>
+</html>
