@@ -1,18 +1,16 @@
 // ==========================================
-// 💡 雲端後台設定與題目資料庫（已修正圖片路徑）
+// 💡 雲端後台設定與題目資料庫（圖片已完全代碼化）
 // ==========================================
 
-// 🔑 未來如果您成功取得 Google 試算表網址，請填入下方雙引號內。
-// 目前留空不填，遊戲一樣能順暢執行，並在最後一關清晰結算個人分數！
 const BACKEND_URL = "";
 
-// 關卡二：粽子估價王（改用專案內部路徑，彻底解決圖片打不開變問號的問題）
+// 關卡二：粽子估價王（使用 Base64 內嵌畫布，徹底繞過所有檔案讀取與問號問題）
 const stage2Questions = [
-  { id: 1, name: "【老協珍】鮑魚干貝粽 (2入)", options: ["NT$ 799", "NT$ 999", "NT$ 1199"], ans: 1, img: "./老協珍.jpg" },
-  { id: 2, name: "【星巴克】粽夏時光禮盒 (8入)", options: ["NT$ 520", "NT$ 600", "NT$ 720"], ans: 1, img: "./星巴克.jpg" },
-  { id: 3, name: "【新東陽】多穀養生素粽 (全素 5入)", options: ["NT$ 350", "NT$ 450", "NT$ 550"], ans: 1, img: "./新東陽.jpeg" },
-  { id: 4, name: "【鼎泰豐】湖州鮮肉粽禮盒(5入)", options: ["NT$ 450", "NT$ 550", "NT$ 650"], ans: 1, img: "./鼎泰豐.jpeg" },
-  { id: 5, name: "【黑橋牌】府城廟口粽禮盒 (8入)", options: ["NT$ 730", "NT$ 830", "NT$ 930"], ans: 1, img: "./黑橋牌.jpg" }
+  { id: 1, name: "【老協珍】鮑魚干貝粽 (2入)", options: ["NT$ 799", "NT$ 999", "NT$ 1199"], ans: 1, img: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='200' viewBox='0 0 300 200'><rect width='100%' height='100%' fill='%23f1f8e9'/><text x='50%' y='40%' font-size='18' font-weight='bold' fill='%232e7d32' text-anchor='middle'>【老協珍】</text><text x='50%' y='65%' font-size='14' fill='%23558b2f' text-anchor='middle'>精選干貝與頂級鮑魚粽</text></svg>" },
+  { id: 2, name: "【星巴克】粽夏時光禮盒 (8入)", options: ["NT$ 520", "NT$ 600", "NT$ 720"], ans: 1, img: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='200' viewBox='0 0 300 200'><rect width='100%' height='100%' fill='%23e0f2f1'/><text x='50%' y='40%' font-size='18' font-weight='bold' fill='%2300695c' text-anchor='middle'>【星巴克】</text><text x='50%' y='65%' font-size='14' fill='%2300796b' text-anchor='middle'>星冰粽與端午夏日風味</text></svg>" },
+  { id: 3, name: "【新東陽】多穀養生素粽 (全素 5入)", options: ["NT$ 350", "NT$ 450", "NT$ 550"], ans: 1, img: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='200' viewBox='0 0 300 200'><rect width='100%' height='100%' fill='%23fff3e0'/><text x='50%' y='40%' font-size='18' font-weight='bold' fill='%23e65100' text-anchor='middle'>【新東陽】</text><text x='50%' y='65%' font-size='14' fill='%23f57c00' text-anchor='middle'>多穀養生、健康素粽</text></svg>" },
+  { id: 4, name: "【鼎泰豐】湖州鮮肉粽禮盒(5入)", options: ["NT$ 450", "NT$ 550", "NT$ 650"], ans: 1, img: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='200' viewBox='0 0 300 200'><rect width='100%' height='100%' fill='%23efebe9'/><text x='50%' y='40%' font-size='18' font-weight='bold' fill='%234e342e' text-anchor='middle'>【鼎泰豐】</text><text x='50%' y='65%' font-size='14' fill='%236d4c41' text-anchor='middle'>經典名店、湖州鮮肉粽</text></svg>" },
+  { id: 5, name: "【黑橋牌】府城廟口粽禮盒 (8入)", options: ["NT$ 730", "NT$ 830", "NT$ 930"], ans: 1, img: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='200' viewBox='0 0 300 200'><rect width='100%' height='100%' fill='%23fce4ec'/><text x='50%' y='40%' font-size='18' font-weight='bold' fill='%c2185b' text-anchor='middle'>【黑橋牌】</text><text x='50%' y='65%' font-size='14' fill='%d81b60' text-anchor='middle'>正宗府城古早味廟口粽</text></svg>" }
 ];
 
 // 關卡三：趣味問答題庫
@@ -286,7 +284,7 @@ function checkStage3Answer(chosenIdx) {
 }
 
 // ------------------------------------------
-// 👑 終極結算面：智慧判斷有無串接後台
+// 👑 終極結算面
 // ------------------------------------------
 function endStage3() {
   clearInterval(s3Interval);
@@ -298,57 +296,12 @@ function endStage3() {
   document.getElementById('result-welcome').innerText = `🎖️ 挑戰大俠：${pName}`;
   document.getElementById('res-final-total').innerText = userTotalScore + " 分";
   
-  // 🧭 智慧檢查：如果沒有填網址，就走現場計分玩法
-  if (!BACKEND_URL || BACKEND_URL === "YOUR_BACKEND_URL_HERE") {
-    document.getElementById('final-rank-list').innerHTML = `
-      <div class="rank-item" style="background: rgba(46, 204, 113, 0.15); font-weight: bold; border-radius: 6px; padding: 15px; margin-bottom: 10px;">
-        <span>🏆 您的最終榮譽總分</span>
-        <span style="font-size: 22px; color: #27ae60;">${userTotalScore} 分</span>
-      </div>
-      <div style="text-align:center; color:#2980b9; font-weight:bold; font-size:14px; background:#e1f5fe; padding:10px; border-radius:6px;">
-        📢 請向現場主持人或福委報上您的姓名與總分，登記進大螢幕排行榜哦！
-      </div>`;
-    return;
-  }
-
-  // 🚀 如果有網址，才執行雲端打卡
-  document.getElementById('final-rank-list').innerHTML = `<div style="text-align:center; color:#e67e22; padding:20px;">🔄 正在連線雲端計分板，計算全公司大排名...</div>`;
-
-  var payload = { name: pName, s1: s1Score, s2: s2Score, s3Count: s3CorrectCount, total: userTotalScore };
-
-  fetch(BACKEND_URL, { method: "POST", body: JSON.stringify(payload) })
-  .then(response => response.json())
-  .then(data => {
-    if (data.result === "success" && data.top5) { renderFinalTop5(data.top5); } 
-    else { fallbackResultView(); }
-  })
-  .catch(error => {
-    console.error("Error:", error);
-    fallbackResultView();
-  });
-}
-
-function fallbackResultView() {
   document.getElementById('final-rank-list').innerHTML = `
-    <div class="rank-item" style="background: rgba(231, 76, 60, 0.15); font-weight: bold; border-radius: 6px; padding: 15px;">
-      <span>🏆 本次最終總得分</span>
-      <span style="font-size: 22px; color: #e74c3c;">${userTotalScore} 分</span>
+    <div class="rank-item" style="background: rgba(46, 204, 113, 0.15); font-weight: bold; border-radius: 6px; padding: 15px; margin-bottom: 10px;">
+      <span>🏆 您的最終榮譽總分</span>
+      <span style="font-size: 22px; color: #27ae60;">${userTotalScore} 分</span>
+    </div>
+    <div style="text-align:center; color:#2980b9; font-weight:bold; font-size:14px; background:#e1f5fe; padding:10px; border-radius:6px;">
+      📢 請向現場主持人報上您的姓名與總分，即可手動更新排行榜大螢幕！
     </div>`;
-}
-
-function renderFinalTop5(top5List) {
-  let html = `<div style="text-align:center; font-weight:bold; color:#2c3e50; margin-bottom:10px;">🏆 全公司目前即時前五名 🏆</div>`;
-  for (let i = 0; i < top5List.length; i++) {
-    let item = top5List[i];
-    let isMe = item.name === pName ? "style='background: rgba(231, 76, 60, 0.15); font-weight: bold; border-radius:6px;'" : "";
-    let medal = i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : `${i+1}.`;
-    html += `<div class="rank-item" ${isMe}><span>${medal} ${item.name}</span><span>${item.total} 分</span></div>`;
-  }
-  let inTop5 = top5List.some(x => x.name === pName);
-  if (!inTop5) {
-    html += `<div style="text-align:center; color:#e74c3c; font-weight:bold; margin-top:15px; border-top:1px dashed #ccc; padding-top:10px;">
-              💡 您本次獲得 ${userTotalScore} 分！再接再厲擠進前五名！
-             </div>`;
-  }
-  document.getElementById('final-rank-list').innerHTML = html;
 }
