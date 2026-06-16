@@ -7,16 +7,16 @@ let competitors = [
   { name: "🦁 總經理 (精算大師)", s1: 120, s2Score: 200, s3: 9, total: 0 },
   { name: "💃 福委會秘書 (小辣椒)", s1: 220, s2Score: 120, s3: 7, total: 0 },
   { name: "🦖 隔壁部門主管", s1: 90,  s2Score: 80,  s3: 6, total: 0 },
-  { name: "🧑‍鍵盤資工工程師", s1: 310, s2Score: 40,  s3: 5, total: 0 }
+  { name: "🧑‍💻 鍵盤資工工程師", s1: 310, s2Score: 40,  s3: 5, total: 0 }
 ];
 
-// 關卡二：全新真實圖片與修正價格題庫
+// 關卡二：粽子估價王（已綁定您上傳的中文檔名圖片與正確答案價格）
 const stage2Questions = [
-  { id: 1, name: "【義美】經典台灣北部粽 (5入)", options: ["NT$ 395", "NT$ 495", "NT$ 595"], ans: 0, img: "https://i4.momoshop.com.tw/1779428031/goodsimg/0015/290/277/spec/15290277_01_001_R.webp" },
-  { id: 2, name: "【星巴克】粽夏時光禮盒 (8入)", options: ["NT$ 520", "NT$ 720", "NT$ 920"], ans: 1, img: "https://www.starbucks.com.tw/common/objects/images/cake/2026040216390598_62.jpg" },
-  { id: 3, name: "【黑橋牌】府城廟口粽禮盒 (8入)", options: ["NT$ 780", "NT$ 980", "NT$ 1180"], ans: 1, img: "https://cdn-general.cybassets.com/media/W1siZiIsIjMyNTgwL3Byb2R1Y3RzLzU0ODUxNjUyLzE3NzY5MjMxMzBfZWNlZTJmZTE1YzRhYzI0MDJhOTMuanBlZyJdLFsicCIsInRodW1iIiwiNjAweDYwMCJdXQ.jpeg?sha=c91ea374e76e6cc1" },
-  { id: 4, name: "【新東陽】多穀養生素粽 (全素 5入)", options: ["NT$ 350", "NT$ 450", "NT$ 550"], ans: 1, img: "https://img.91app.com/webapi/imagesV3/Original/SalePage/11709655/0/639168580315900000?v=1" },
-  { id: 5, name: "【老協珍】鮑魚干貝粽 (2入)", options: ["NT$ 799", "NT$ 999", "NT$ 1199"], ans: 1, img: "https://d3san4pg9xqi43.cloudfront.net/images/f6fcffa6-764c-4daf-8558-d2bf0a37319c.jpg" }
+  { id: 1, name: "【老協珍】鮑魚干貝粽 (2入)", options: ["NT$ 799", "NT$ 999", "NT$ 1199"], ans: 1, img: "老協珍.jpg" },
+  { id: 2, name: "【星巴克】粽夏時光禮盒 (8入)", options: ["NT$ 520", "NT$ 600", "NT$ 720"], ans: 1, img: "星巴克.jpg" },
+  { id: 3, name: "【新東陽】多穀養生素粽 (全素 5入)", options: ["NT$ 350", "NT$ 450", "NT$ 550"], ans: 1, img: "新東陽.jpeg" },
+  { id: 4, name: "【鼎泰豐】湖州鮮肉粽禮盒(5入)", options: ["NT$ 450", "NT$ 550", "NT$ 650"], ans: 1, img: "鼎泰豐.jpeg" },
+  { id: 5, name: "【黑橋牌】府城廟口粽禮盒 (8入)", options: ["NT$ 730", "NT$ 830", "NT$ 930"], ans: 1, img: "黑橋牌.jpg" }
 ];
 
 // 關卡三：趣味問答題庫
@@ -76,12 +76,12 @@ function startGame() {
 }
 
 // ------------------------------------------
-// 關卡一：龍舟接粽子
+// 關卡一：龍舟接粽子（已將時間修改為 40 秒）
 // ------------------------------------------
 let canvas, ctx;
 let boat = { x: 130, y: 270, w: 70, h: 25 };
 let items = []; 
-let s1Timer = 50;
+let s1Timer = 40; // ⏱️ 第一關修改為 40 秒
 let s1Interval, spawnInterval, gameLoopId;
 
 function initStage1() {
@@ -271,9 +271,9 @@ function checkStage2Answer(chosenIdx) {
 }
 
 // ------------------------------------------
-// 第三關：端午趣味答題
+// 第三關：端午趣味答題（已將時間修改為 50 秒）
 // ------------------------------------------
-let s3Timer = 60; 
+let s3Timer = 50; // ⏱️ 第三關修改為 50 秒
 let s3Interval;
 
 function initStage3() {
@@ -351,4 +351,4 @@ function endStage3() {
   }
   document.getElementById('final-rank-list').innerHTML = html;
 }
-}
+
