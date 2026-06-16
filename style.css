@@ -1,153 +1,339 @@
+/* ==========================================
+   🎨 完美復原：大俠原創端午節配色系統
+   ========================================== */
 :root {
-  --primary: #123e15;      /* 粽葉深綠 */
-  --secondary: #d4af37;    /* 節慶金沙黃 */
-  --accent: #e74c3c;       /* 警示/正解紅 */
-  --bg: #f3f7f3;           /* 淺綠白底 */
+  --primary: #123e15;       /* 粽葉深綠 */
+  --secondary: #d4af37;     /* 節慶金沙黃 */
+  --accent: #e74c3c;        /* 警示/正解紅 */
+  --bg: #f3f7f3;            /* 淺綠白底 */
   --text: #2c3e50;
-}
-
-*, *::before, *::after {
-  box-sizing: border-box;
+  --correct: #2ecc71;       /* 正確綠 */
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Microsoft JhengHei", sans-serif;
   background-color: var(--bg);
   color: var(--text);
-  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.game-wrapper {
+  width: 100%;
+  max-width: 480px;
   padding: 15px;
+  box-sizing: border-box;
+}
+
+/* 關卡螢幕基礎設定 */
+.stage-screen {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 25px 20px;
+  border: 2px solid var(--primary); /* 融入粽葉綠邊框 */
+  box-shadow: 0 8px 24px rgba(18, 62, 21, 0.08);
+  box-sizing: border-box;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.container {
-  width: 100%;
-  max-width: 480px; /* 手機黃金比例寬度 */
+.hide {
+  display: none !important;
 }
 
-.card {
-  background: white;
-  border-radius: 16px;
-  padding: 24px;
-  box-shadow: 0 8px 24px rgba(18, 62, 21, 0.08);
-  margin-bottom: 20px;
-  border-top: 6px solid var(--secondary);
+/* ==========================================
+   🧩 核心通用元件 (輸入框、按鈕)
+   ========================================== */
+.welcome-box {
+  width: 100%;
   text-align: center;
 }
 
-h1, h2, h3 {
+h1 {
+  font-size: 26px;
   color: var(--primary);
   margin-top: 0;
-}
-
-.title-banner {
-  font-size: 24px;
-  font-weight: bold;
-  letter-spacing: 2px;
-  color: var(--primary);
-  text-shadow: 1px 1px 0px var(--secondary);
   margin-bottom: 10px;
 }
 
-input[type="text"], input[type="number"] {
-  width: 100%;
-  padding: 14px;
-  font-size: 18px;
-  border: 2px solid #ddd;
-  border-radius: 10px;
-  margin: 15px 0;
-  text-align: center;
-  outline: none;
-  transition: border-color 0.3s;
+.subtitle {
+  font-size: 14px;
+  color: var(--text);
+  opacity: 0.8;
+  line-height: 1.5;
+  margin-bottom: 25px;
 }
 
-input:focus {
+.input-group {
+  width: 100%;
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.input-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: var(--primary);
+}
+
+.input-group input {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #bdc3c7;
+  border-radius: 8px;
+  font-size: 16px;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+
+.input-group input:focus {
   border-color: var(--primary);
+  outline: none;
 }
 
-button {
+/* 經典節慶金沙黃主按鈕 */
+.start-btn {
   width: 100%;
-  background: linear-gradient(135deg, var(--primary), #1e5a22);
-  color: white;
+  background: var(--secondary);
+  color: var(--primary); /* 金底綠字，對比清晰 */
   border: none;
   padding: 14px;
   font-size: 18px;
   font-weight: bold;
-  border-radius: 10px;
+  border-radius: 8px;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(18, 62, 21, 0.2);
-  transition: transform 0.1s, opacity 0.3s;
+  box-shadow: 0 4px 6px rgba(212, 175, 55, 0.2);
+  transition: all 0.2s;
 }
 
-button:active {
-  transform: scale(0.98);
+.start-btn:hover {
+  background: #c29d2c;
 }
 
-button:disabled {
-  background: #bdc3c7;
-  box-shadow: none;
-  cursor: not-allowed;
-}
-
-.img-box {
+/* ==========================================
+   🛶 關卡一：畫布與狀態列
+   ========================================== */
+.stage-header {
   width: 100%;
-  height: 220px;
-  border-radius: 12px;
-  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   margin-bottom: 15px;
-  border: 3px solid var(--secondary);
+  border-bottom: 2px solid var(--bg);
+  padding-bottom: 12px;
 }
 
-.img-box img {
+.stage-badge {
+  background: var(--primary);
+  color: var(--secondary);
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 20px;
+  margin-bottom: 8px;
+}
+
+.status-bar {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.stage-timer {
+  color: var(--accent);
+}
+
+.stage-score {
+  color: var(--primary);
+}
+
+.game-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hint-text {
+  font-size: 13px;
+  color: var(--text);
+  opacity: 0.8;
+  line-height: 1.4;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.canvas-wrapper {
+  background: #fff;
+  border: 3px solid var(--primary);
+  border-radius: 8px;
+  overflow: hidden;
+  line-height: 0;
+}
+
+/* ==========================================
+   💰 關卡二 & 🧠 關卡三：垂直置中與按鈕細節
+   ========================================== */
+.flex-container {
+  width: 100%;
+  text-align: center;
+}
+
+.product-name, .question-text {
+  font-size: 19px;
+  color: var(--primary);
+  margin: 10px 0 15px 0;
+  line-height: 1.4;
+  font-weight: bold;
+}
+
+.stage-q-num {
+  font-size: 16px;
+  color: var(--secondary);
+  font-weight: bold;
+  margin: 5px 0;
+}
+
+.image-frame {
+  width: 100%;
+  max-width: 260px;
+  height: 180px;
+  margin: 0 auto 15px auto;
+  border-radius: 12px;
+  border: 2px solid var(--secondary); /* 金沙黃外框 */
+  box-shadow: 0 4px 12px rgba(18, 62, 21, 0.1);
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.image-frame img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.status-msg {
-  font-size: 16px;
-  color: #666;
-  font-style: italic;
-  margin: 20px 0;
+.hint-text-s2 {
+  color: var(--text);
+  font-size: 14px;
+  margin: 10px 0;
+  font-weight: bold;
 }
 
-.rank-list {
-  margin-top: 15px;
-  text-align: left;
+/* 答題選項按鈕 */
+.options-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 5px;
+}
+
+.choice-btn {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  background: #ffffff;
+  color: var(--text);
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: all 0.2s;
+  text-align: center;
+}
+
+.choice-btn:hover {
+  background: var(--bg);
+  border-color: var(--primary);
+}
+
+/* 答題回饋動態效果（精準套用紅綠配色） */
+.correct-ans {
+  background: var(--correct) !important;
+  color: white !important;
+  border-color: var(--correct) !important;
+}
+
+.wrong-ans {
+  background: var(--accent) !important;
+  color: white !important;
+  border-color: var(--accent) !important;
+}
+
+/* ==========================================
+   📊 計分板與最終榮譽榜
+   ========================================== */
+.score-display {
+  margin: 20px 0;
+  font-size: 16px;
+  color: var(--text);
+}
+
+.total-number {
+  font-size: 36px;
+  font-weight: bold;
+  color: var(--secondary);
+}
+
+.rank-zone {
+  width: 100%;
+  margin-bottom: 25px;
+}
+
+.rank-zone h3 {
+  font-size: 16px;
+  color: var(--primary);
+  margin-bottom: 12px;
 }
 
 .rank-item {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 15px;
+  border-radius: 8px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 16px;
-  border-bottom: 1px solid #eee;
-  font-size: 16px;
+  font-size: 15px;
 }
 
-.rank-item:nth-child(1) { background: rgba(212, 175, 55, 0.15); font-weight: bold; border-radius: 6px; }
-
-.hide {
-  display: none !important;
+.rank-item.mine {
+  background: rgba(212, 175, 55, 0.15);
+  border: 1px solid var(--secondary);
+  font-weight: bold;
 }
 
-/* 主持人專用後台樣式 */
-.admin-body {
-  background-color: #1a1a1a;
-  color: #fff;
+.final-score-box {
+  background: rgba(18, 62, 21, 0.08);
+  border: 1px solid var(--primary);
+  font-weight: bold;
+  padding: 15px;
 }
-.admin-card {
-  background: #2c2c2c;
-  color: #fff;
-  border-top: 6px solid var(--secondary);
+
+.final-highlight {
+  font-size: 22px;
+  color: var(--primary);
 }
-.admin-btn-group {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  margin-bottom: 15px;
+
+.host-hint {
+  text-align: center;
+  color: var(--primary);
+  font-weight: bold;
+  font-size: 14px;
+  background: rgba(212, 175, 55, 0.2);
+  padding: 12px;
+  border-radius: 8px;
+  line-height: 1.4;
+  margin-top: 15px;
 }
-.btn-orange { background: #e67e22; }
-.btn-green { background: #27ae60; }
-.btn-red { background: #c0392b; }
