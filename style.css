@@ -1,339 +1,52 @@
-/* ==========================================
-   🎨 完美復原：大俠原創端午節配色系統
-   ========================================== */
 :root {
-  --primary: #123e15;       /* 粽葉深綠 */
-  --secondary: #d4af37;     /* 節慶金沙黃 */
-  --accent: #e74c3c;        /* 警示/正解紅 */
-  --bg: #f3f7f3;            /* 淺綠白底 */
+  --primary: #123e15;
+  --secondary: #d4af37;
+  --bg: #f3f7f3;
   --text: #2c3e50;
-  --correct: #2ecc71;       /* 正確綠 */
 }
 
 body {
   margin: 0;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Microsoft JhengHei", sans-serif;
   background-color: var(--bg);
   color: var(--text);
+  font-family: sans-serif;
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
 }
 
-.game-wrapper {
-  width: 100%;
-  max-width: 480px;
-  padding: 15px;
-  box-sizing: border-box;
-}
+.game-wrapper { width: 100%; max-width: 480px; padding: 20px; }
 
-/* 關卡螢幕基礎設定 */
 .stage-screen {
   background: #ffffff;
+  padding: 25px;
   border-radius: 16px;
-  padding: 25px 20px;
-  border: 2px solid var(--primary); /* 融入粽葉綠邊框 */
-  box-shadow: 0 8px 24px rgba(18, 62, 21, 0.08);
-  box-sizing: border-box;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.hide {
-  display: none !important;
-}
-
-/* ==========================================
-   🧩 核心通用元件 (輸入框、按鈕)
-   ========================================== */
-.welcome-box {
-  width: 100%;
+  border: 2px solid var(--primary);
   text-align: center;
 }
 
-h1 {
-  font-size: 26px;
-  color: var(--primary);
-  margin-top: 0;
-  margin-bottom: 10px;
-}
-
-.subtitle {
-  font-size: 14px;
-  color: var(--text);
-  opacity: 0.8;
-  line-height: 1.5;
-  margin-bottom: 25px;
-}
-
-.input-group {
-  width: 100%;
-  text-align: left;
-  margin-bottom: 20px;
-}
-
-.input-group label {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 8px;
-  color: var(--primary);
-}
-
-.input-group input {
-  width: 100%;
-  padding: 12px;
-  border: 2px solid #bdc3c7;
-  border-radius: 8px;
-  font-size: 16px;
-  box-sizing: border-box;
-  transition: border-color 0.2s;
-}
-
-.input-group input:focus {
-  border-color: var(--primary);
-  outline: none;
-}
-
-/* 經典節慶金沙黃主按鈕 */
-.start-btn {
-  width: 100%;
-  background: var(--secondary);
-  color: var(--primary); /* 金底綠字，對比清晰 */
-  border: none;
-  padding: 14px;
-  font-size: 18px;
-  font-weight: bold;
-  border-radius: 8px;
-  cursor: pointer;
-  box-shadow: 0 4px 6px rgba(212, 175, 55, 0.2);
-  transition: all 0.2s;
-}
-
-.start-btn:hover {
-  background: #c29d2c;
-}
-
-/* ==========================================
-   🛶 關卡一：畫布與狀態列
-   ========================================== */
-.stage-header {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 15px;
-  border-bottom: 2px solid var(--bg);
-  padding-bottom: 12px;
-}
-
-.stage-badge {
-  background: var(--primary);
-  color: var(--secondary);
-  padding: 4px 12px;
-  font-size: 12px;
-  font-weight: bold;
-  border-radius: 20px;
-  margin-bottom: 8px;
-}
-
-.status-bar {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  font-weight: bold;
-  font-size: 15px;
-}
-
-.stage-timer {
-  color: var(--accent);
-}
-
-.stage-score {
-  color: var(--primary);
-}
-
-.game-container {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.hint-text {
-  font-size: 13px;
-  color: var(--text);
-  opacity: 0.8;
-  line-height: 1.4;
-  text-align: center;
-  margin-bottom: 15px;
-}
-
-.canvas-wrapper {
-  background: #fff;
-  border: 3px solid var(--primary);
-  border-radius: 8px;
-  overflow: hidden;
-  line-height: 0;
-}
-
-/* ==========================================
-   💰 關卡二 & 🧠 關卡三：垂直置中與按鈕細節
-   ========================================== */
-.flex-container {
-  width: 100%;
-  text-align: center;
-}
-
-.product-name, .question-text {
-  font-size: 19px;
-  color: var(--primary);
-  margin: 10px 0 15px 0;
-  line-height: 1.4;
-  font-weight: bold;
-}
-
-.stage-q-num {
-  font-size: 16px;
-  color: var(--secondary);
-  font-weight: bold;
-  margin: 5px 0;
-}
+.hide { display: none !important; }
 
 .image-frame {
   width: 100%;
-  max-width: 260px;
-  height: 180px;
-  margin: 0 auto 15px auto;
-  border-radius: 12px;
-  border: 2px solid var(--secondary); /* 金沙黃外框 */
-  box-shadow: 0 4px 12px rgba(18, 62, 21, 0.1);
+  height: 200px;
+  margin: 15px 0;
+  border: 2px solid var(--secondary);
+  border-radius: 8px;
   overflow: hidden;
-  background: #ffffff;
 }
 
-.image-frame img {
+.image-frame img { width: 100%; height: 100%; object-fit: cover; }
+
+.start-btn {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.hint-text-s2 {
-  color: var(--text);
-  font-size: 14px;
-  margin: 10px 0;
-  font-weight: bold;
-}
-
-/* 答題選項按鈕 */
-.options-container {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: 5px;
-}
-
-.choice-btn {
-  width: 100%;
-  padding: 12px 15px;
-  border: 1px solid #ddd;
-  background: #ffffff;
-  color: var(--text);
-  font-size: 16px;
-  font-weight: bold;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.03);
-  cursor: pointer;
-  box-sizing: border-box;
-  transition: all 0.2s;
-  text-align: center;
-}
-
-.choice-btn:hover {
-  background: var(--bg);
-  border-color: var(--primary);
-}
-
-/* 答題回饋動態效果（精準套用紅綠配色） */
-.correct-ans {
-  background: var(--correct) !important;
-  color: white !important;
-  border-color: var(--correct) !important;
-}
-
-.wrong-ans {
-  background: var(--accent) !important;
-  color: white !important;
-  border-color: var(--accent) !important;
-}
-
-/* ==========================================
-   📊 計分板與最終榮譽榜
-   ========================================== */
-.score-display {
-  margin: 20px 0;
-  font-size: 16px;
-  color: var(--text);
-}
-
-.total-number {
-  font-size: 36px;
-  font-weight: bold;
-  color: var(--secondary);
-}
-
-.rank-zone {
-  width: 100%;
-  margin-bottom: 25px;
-}
-
-.rank-zone h3 {
-  font-size: 16px;
+  background: var(--secondary);
   color: var(--primary);
-  margin-bottom: 12px;
-}
-
-.rank-item {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 12px 15px;
-  border-radius: 8px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 15px;
-}
-
-.rank-item.mine {
-  background: rgba(212, 175, 55, 0.15);
-  border: 1px solid var(--secondary);
-  font-weight: bold;
-}
-
-.final-score-box {
-  background: rgba(18, 62, 21, 0.08);
-  border: 1px solid var(--primary);
-  font-weight: bold;
   padding: 15px;
-}
-
-.final-highlight {
-  font-size: 22px;
-  color: var(--primary);
-}
-
-.host-hint {
-  text-align: center;
-  color: var(--primary);
-  font-weight: bold;
-  font-size: 14px;
-  background: rgba(212, 175, 55, 0.2);
-  padding: 12px;
+  border: none;
   border-radius: 8px;
-  line-height: 1.4;
-  margin-top: 15px;
+  font-weight: bold;
+  cursor: pointer;
 }
