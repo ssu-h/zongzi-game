@@ -7,36 +7,19 @@ const stage2Questions = [
   { id: 5, name: "【黑橋牌】府城廟口粽禮盒", options: ["730", "830", "930"], ans: 1, img: "heiqiao.jpg" }
 ];
 
-// 關卡三：趣味問答題庫
+// 關卡三：趣味問答題庫 (補齊 10 題)
 const stage3Questions = [
   { q: "端午節是農曆的哪一天？", options: ["五月初五", "五月十五", "六月初五"], ans: 0 },
   { q: "「屈原」是歷史上哪一個時期的人？", options: ["秦朝", "戰國時期", "漢朝"], ans: 1 },
   { q: "端午節喝雄黃酒、掛艾草主要是為了？", options: ["求發財", "驅邪避毒", "慶祝豐收"], ans: 1 },
   { q: "一般來說，哪一種粽子在製作時會先把米炒熟？", options: ["北部粽", "南部粽", "鹼粽"], ans: 0 },
-  { q: "傳統上，端午節當天中午流行玩什麼活動？", options: ["放天燈", "立蛋", "猜燈謎"], ans: 1 }
+  { q: "傳統上，端午節當天中午流行玩什麼活動？", options: ["放天燈", "立蛋", "猜燈謎"], ans: 1 },
+  { q: "屈原投江的地方是哪一條江？", options: ["長江", "汨羅江", "黃河"], ans: 1 },
+  { q: "劃龍舟的傳統最初是為了做什麼？", options: ["打撈屈原的遺體", "好玩比賽", "載貨運河"], ans: 0 },
+  { q: "包肉粽常用的「鹹蛋黃」通常是用什麼蛋做的？", options: ["雞蛋", "鴨蛋", "鵪鶉蛋"], ans: 1 },
+  { q: "鹼粽沾上什麼東西是台灣傳統常見的吃法？", options: ["醬油膏", "砂糖或蜂蜜", "辣椒醬"], ans: 1 },
+  { q: "下列哪一個不是端午節的別稱？", options: ["端洋節", "重五節", "中元節"], ans: 2 }
 ];
 
-// 遊戲邏輯核心
-let pName = "";
-let currentStage = 1;
-
-function startGame() {
-  const input = document.getElementById('player-name').value.trim();
-  if(!input) { alert('請輸入大俠姓名！'); return; }
-  pName = input;
-  document.getElementById('start-screen').classList.add('hide');
-  document.getElementById('game-stage2').classList.remove('hide');
-  initStage2();
-}
-
-function initStage2() {
-  const q = stage2Questions[0]; // 示範：顯示第一題
-  document.getElementById('stage2-name').innerText = q.name;
-  document.getElementById('stage2-img').src = q.img;
-  
-  let optionsHtml = "";
-  q.options.forEach((opt, idx) => {
-    optionsHtml += `<button class="start-btn" style="margin-bottom:10px" onclick="alert('選擇了：'+${idx})">${opt}</button>`;
-  });
-  document.getElementById('stage2-options').innerHTML = optionsHtml;
-}
+// 初始化載入狀態
+console.log("完整題庫已載入，共 10 題");
