@@ -7,14 +7,14 @@ let competitors = [
   { name: "🦁 總經理 (精算大師)", s1: 120, s2Score: 200, s3: 9, total: 0 },
   { name: "💃 福委會秘書 (小辣椒)", s1: 220, s2Score: 120, s3: 7, total: 0 },
   { name: "🦖 隔壁部門主管", s1: 90,  s2Score: 80,  s3: 6, total: 0 },
-  { name: "🧑‍💻 爆肝資工工程師", s1: 310, s2Score: 40,  s3: 5, total: 0 }
+  { name: "🧑‍鍵盤資工工程師", s1: 310, s2Score: 40,  s3: 5, total: 0 }
 ];
 
-// 關卡二：全新真實圖片與修正價格題庫 (已將老協珍修正為 999 元)
+// 關卡二：全新真實圖片與修正價格題庫
 const stage2Questions = [
   { id: 1, name: "【義美】經典台灣北部粽 (5入)", options: ["NT$ 395", "NT$ 495", "NT$ 595"], ans: 0, img: "https://i4.momoshop.com.tw/1779428031/goodsimg/0015/290/277/spec/15290277_01_001_R.webp" },
   { id: 2, name: "【星巴克】粽夏時光禮盒 (8入)", options: ["NT$ 520", "NT$ 720", "NT$ 920"], ans: 1, img: "https://www.starbucks.com.tw/common/objects/images/cake/2026040216390598_62.jpg" },
-  { id: 3, name: "【黑橋牌】府城廟口粽禮盒 (8入)", options: ["NT$ 780", "NT$ 980", "NT$ 1180"], ans: 1, img: "https://cdn-general.cybassets.com/media/W1siZiIsIjMyNTgwL3Byb2R1Y3RzLzU0ODUxNjUyLzE3NzY5MjMxMzBfZWNlZTJmTabzYwMDAiXQ.jpeg?sha=c91ea374e76e6cc1" },
+  { id: 3, name: "【黑橋牌】府城廟口粽禮盒 (8入)", options: ["NT$ 780", "NT$ 980", "NT$ 1180"], ans: 1, img: "https://cdn-general.cybassets.com/media/W1siZiIsIjMyNTgwL3Byb2R1Y3RzLzU0ODUxNjUyLzE3NzY5MjMxMzBfZWNlZTJmZTE1YzRhYzI0MDJhOTMuanBlZyJdLFsicCIsInRodW1iIiwiNjAweDYwMCJdXQ.jpeg?sha=c91ea374e76e6cc1" },
   { id: 4, name: "【新東陽】多穀養生素粽 (全素 5入)", options: ["NT$ 350", "NT$ 450", "NT$ 550"], ans: 1, img: "https://img.91app.com/webapi/imagesV3/Original/SalePage/11709655/0/639168580315900000?v=1" },
   { id: 5, name: "【老協珍】鮑魚干貝粽 (2入)", options: ["NT$ 799", "NT$ 999", "NT$ 1199"], ans: 1, img: "https://d3san4pg9xqi43.cloudfront.net/images/f6fcffa6-764c-4daf-8558-d2bf0a37319c.jpg" }
 ];
@@ -211,7 +211,7 @@ function showLeaderboardPage(titleText) {
   document.getElementById('stage-rank-list').innerHTML = html;
   
   const nextBtn = document.getElementById('next-stage-btn');
-  if(currentStageNum === 1) nextBtn.innerText = "進入第二關：猜粽子價格 💰";
+  if(currentStageNum === 1) nextBtn.innerText = "進入第二關：粽子估價王 💰";
   if(currentStageNum === 2) nextBtn.innerText = "進入第三關：端午趣味答題 🧠";
   showScreen('leaderboard-screen');
 }
@@ -223,7 +223,7 @@ function goToNextStage() {
 }
 
 // ------------------------------------------
-// 第二關：猜粽子價格
+// 第二關：粽子估價王
 // ------------------------------------------
 function initStage2() {
   const q = stage2Questions[s2CurrentIdx];
@@ -265,7 +265,7 @@ function checkStage2Answer(chosenIdx) {
     } else {
       userTotalScore += s2Score;
       currentStageNum = 2;
-      showLeaderboardPage("💰 第二關：猜粽子價格 結束");
+      showLeaderboardPage("💰 第二關：粽子估價王 結束");
     }
   }, 1500);
 }
@@ -350,4 +350,5 @@ function endStage3() {
     html += `<div class="rank-item" ${isUser}><span>${medal} ${item.name}</span><span>${item.total} 分</span></div>`;
   }
   document.getElementById('final-rank-list').innerHTML = html;
+}
 }
