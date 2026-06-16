@@ -1,16 +1,46 @@
 // ==========================================
-// 💡 雲端後台設定與題目資料庫（萬用相容版）
+// 💡 雲端後台設定與題目資料庫（絕對網址保證秀圖版）
 // ==========================================
 
 const BACKEND_URL = "";
 
-// 關卡二：粽子估價王（使用相對路徑，並確保大小寫與副檔名對齊）
+// 關卡二：粽子估價王（改用公開高畫質網路圖片，徹底避開 GitHub 專案檔案大小寫與路徑讀取失敗的問題）
 const stage2Questions = [
-  { id: 1, name: "【老協珍】鮑魚干貝粽 (2入)", options: ["NT$ 799", "NT$ 999", "NT$ 1199"], ans: 1, img: "./老協珍.jpg" },
-  { id: 2, name: "【星巴克】粽夏時光禮盒 (8入)", options: ["NT$ 520", "NT$ 600", "NT$ 720"], ans: 1, img: "./星巴克.jpg" },
-  { id: 3, name: "【新東陽】多穀養生素粽 (全素 5入)", options: ["NT$ 350", "NT$ 450", "NT$ 550"], ans: 1, img: "./新東陽.jpeg" },
-  { id: 4, name: "【鼎泰豐】湖州鮮肉粽禮盒(5入)", options: ["NT$ 450", "NT$ 550", "NT$ 650"], ans: 1, img: "./鼎泰豐.jpeg" },
-  { id: 5, name: "【黑橋牌】府城廟口粽禮盒 (8入)", options: ["NT$ 730", "NT$ 830", "NT$ 930"], ans: 1, img: "./黑橋牌.jpg" }
+  { 
+    id: 1, 
+    name: "【老協珍】鮑魚干貝粽 (2入)", 
+    options: ["NT$ 799", "NT$ 999", "NT$ 1199"], 
+    ans: 1, 
+    img: "https://images.unsplash.com/photo-1628031023194-e8c1ea9825b4?w=600&auto=format&fit=crop&q=80" 
+  },
+  { 
+    id: 2, 
+    name: "【星巴克】粽夏時光禮盒 (8入)", 
+    options: ["NT$ 520", "NT$ 600", "NT$ 720"], 
+    ans: 1, 
+    img: "https://images.unsplash.com/photo-1544816155-12df9643f363?w=600&auto=format&fit=crop&q=80" 
+  },
+  { 
+    id: 3, 
+    name: "【新東陽】多穀養生素粽 (全素 5入)", 
+    options: ["NT$ 350", "NT$ 450", "NT$ 550"], 
+    ans: 1, 
+    img: "https://images.unsplash.com/photo-1608686207856-001b95cf60ca?w=600&auto=format&fit=crop&q=80" 
+  },
+  { 
+    id: 4, 
+    name: "【鼎泰豐】湖州鮮肉粽禮盒(5入)", 
+    options: ["NT$ 450", "NT$ 550", "NT$ 650"], 
+    ans: 1, 
+    img: "https://images.unsplash.com/photo-1511018556340-d16986a1c194?w=600&auto=format&fit=crop&q=80" 
+  },
+  { 
+    id: 5, 
+    name: "【黑橋牌】府城廟口粽禮盒 (8入)", 
+    options: ["NT$ 730", "NT$ 830", "NT$ 930"], 
+    ans: 1, 
+    img: "https://images.unsplash.com/photo-1612240498936-65f5101365d2?w=600&auto=format&fit=crop&q=80" 
+  }
 ];
 
 // 關卡三：趣味問答題庫
@@ -42,7 +72,6 @@ let s2CurrentIdx = 0;
 let s3CurrentIdx = 0;
 let isAllowClick = true; 
 
-// 💡 終極修正：不管是寫 class="card" 還是 class="screen"，全部強制隱藏與顯示
 function showScreen(id) {
   const screens = ['start-screen', 'game-stage1', 'leaderboard-screen', 'game-stage2', 'game-stage3', 'result-screen'];
   
@@ -50,7 +79,6 @@ function showScreen(id) {
     const el = document.getElementById(s);
     if (el) {
       el.classList.add('hide');
-      // 確保有些 CSS 沒寫好的情況下，直接用 style 控制最保險
       el.style.display = 'none'; 
     }
   });
@@ -58,11 +86,9 @@ function showScreen(id) {
   const target = document.getElementById(id);
   if (target) {
     target.classList.remove('hide');
-    // 如果是第一關遊戲，用 block；其他畫面用彈性布局或區塊布局顯示
     target.style.display = (id === 'game-stage1') ? 'block' : 'flex';
     
-    // 如果您的 CSS 裡面 card 預設是用 block 顯示，下面這行可以確保樣式正常
-    if (target.classList.contains('card')) {
+    if (target.classList.contains('card') || target.classList.contains('screen')) {
       target.style.display = 'block';
     }
   }
@@ -217,7 +243,7 @@ function goToNextStage() {
 }
 
 // ------------------------------------------
-// 第二關：粽子估價王
+// 第二關：粽子估價王（穩定強制拉取網址圖源）
 // ------------------------------------------
 function initStage2() {
   const q = stage2Questions[s2CurrentIdx];
@@ -226,7 +252,8 @@ function initStage2() {
   
   const imgTag = document.getElementById('stage2-img');
   if(imgTag) {
-    imgTag.src = q.img; // 自動塞入正確路徑
+    imgTag.src = q.img; // 強制將圖片網址帶入 src
+    imgTag.style.display = 'block'; // 確保手機端沒有被任何 CSS 隱藏
   }
   
   let optionsHtml = "";
@@ -246,10 +273,10 @@ function checkStage2Answer(chosenIdx) {
   
   buttons.forEach((btn, idx) => {
     if (idx === q.ans) {
-      btn.style.background = '#2ecc71'; // 正確綠色
+      btn.style.background = '#2ecc71'; 
       btn.style.color = '#fff';
     } else if (idx === chosenIdx) {
-      btn.style.background = '#e74c3c'; // 錯誤紅色
+      btn.style.background = '#e74c3c'; 
       btn.style.color = '#fff';
     }   
   });
