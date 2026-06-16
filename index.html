@@ -3,121 +3,41 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>端午大俠爭霸戰 ── 粽藝大集合</title>
+  <title>端午大俠爭霸戰</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
   <div class="game-wrapper">
-    
     <div id="start-screen" class="stage-screen">
-      <div class="welcome-box">
-        <h1>🛶 端午大俠爭霸戰 🧠</h1>
-        <p class="subtitle">歡迎來到粽藝大集合！連過三關手速、眼力與智慧的考驗，贏取端午至高榮譽吧！</p>
-        
-        <div class="input-group">
-          <label for="player-name">👤 請輸入大俠尊姓大名：</label>
-          <input type="text" id="player-name" placeholder="例如：王小明" maxlength="10">
-        </div>
-        
-        <button class="start-btn" onclick="startGame()">開始挑戰 ⚔️</button>
-      </div>
+      <h1>🛶 端午大俠爭霸戰</h1>
+      <input type="text" id="player-name" placeholder="請輸入大俠姓名">
+      <button class="start-btn" onclick="startGame()">開始挑戰</button>
     </div>
 
     <div id="game-stage1" class="stage-screen hide">
-      <div class="stage-header">
-        <span class="stage-badge">關卡一：龍舟接粽</span>
-        <div class="status-bar">
-          <span id="timer1" class="stage-timer">⏱️ 剩餘時間: 40 秒</span>
-          <span id="score1" class="stage-score">得分: 0</span>
-        </div>
-      </div>
-      
-      <div class="game-container">
-        <p class="hint-text">💡 左右移動滑鼠或用手指拖曳橘色龍舟，接住落下的「綠粽子 (+10)」，避開「醬油 (-10)」與「石頭 (-20)」！</p>
-        <div class="canvas-wrapper">
-          <canvas id="gameCanvas" width="300" height="300"></canvas>
-        </div>
-      </div>
-    </div>
-
-    <div id="leaderboard-screen" class="stage-screen hide">
-      <div class="welcome-box">
-        <h2 id="leaderboard-title">關卡結束</h2>
-        <div class="score-display">
-          <p>您目前累積的總分：</p>
-          <span id="current-user-total" class="total-number">0</span><span> 分</span>
-        </div>
-        
-        <div class="rank-zone">
-          <h3>🏆 本次挑戰即時戰況</h3>
-          <div id="stage-rank-list">
-            </div>
-        </div>
-        
-        <button id="next-stage-btn" class="start-btn" onclick="goToNextStage()">進入下一關</button>
-      </div>
+      <div class="status-bar"><span id="timer1">⏱️ 40s</span><span id="score1">得分: 0</span></div>
+      <canvas id="gameCanvas" width="300" height="300"></canvas>
     </div>
 
     <div id="game-stage2" class="stage-screen hide">
-      <div class="stage-header">
-        <span class="stage-badge">關卡二：粽子估價王</span>
-        <h2 id="stage2-title" class="stage-timer">第 1 / 5 題</h2>
-      </div>
-      
-      <div class="game-container flex-container">
-        <h3 id="stage2-name" class="product-name">商品載入中...</h3>
-        
-        <div class="image-frame">
-          <img id="stage2-img" src="laoxiezhen.jpg" alt="粽子商品圖">
-        </div>
-        
-        <p class="hint-text-s2">請選擇這組粽子的官方新台幣售價：</p>
-        
-        <div id="stage2-options" class="options-container">
-          </div>
-      </div>
+      <h2 id="stage2-title">第 1 / 5 題</h2>
+      <h3 id="stage2-name">載入中...</h3>
+      <div class="image-frame"><img id="stage2-img" src="" alt="粽子"></div>
+      <div id="stage2-options"></div>
     </div>
 
     <div id="game-stage3" class="stage-screen hide">
-      <div class="stage-header">
-        <span class="stage-badge">關卡三：端午趣味答題</span>
-        <div class="status-bar">
-          <span id="timer3" class="stage-timer">⏱️ 剩餘時間: 50 秒</span>
-        </div>
-      </div>
-      
-      <div class="game-container flex-container">
-        <h2 id="stage3-title" class="stage-q-num">第 1 / 10 題</h2>
-        <h3 id="stage3-question" class="question-text">題目載入中...</h3>
-        
-        <div id="stage3-options" class="options-container">
-          </div>
-      </div>
+      <h2 id="stage3-title">第 1 / 10 題</h2>
+      <h3 id="stage3-question">載入中...</h3>
+      <div id="stage3-options"></div>
     </div>
 
     <div id="result-screen" class="stage-screen hide">
-      <div class="welcome-box">
-        <h1>🎉 全關卡挑戰成功！ 🎉</h1>
-        <h2 id="result-welcome">🎖️ 挑戰大俠：</h2>
-        
-        <div class="score-display">
-          <p>您最終獲得的端午爭霸總分：</p>
-          <span id="res-final-total" class="total-number">0</span><span> 分</span>
-        </div>
-        
-        <div class="rank-zone">
-          <h3>👑 端午至高榮譽榜</h3>
-          <div id="final-rank-list">
-            </div>
-        </div>
-        
-        <button class="start-btn" onclick="window.location.reload()">重新挑戰 🔄</button>
-      </div>
+      <h1>挑戰完成！</h1>
+      <p id="res-final-total"></p>
+      <button class="start-btn" onclick="location.reload()">重新開始</button>
     </div>
-
   </div>
-
   <script src="config.js"></script>
 </body>
 </html>
