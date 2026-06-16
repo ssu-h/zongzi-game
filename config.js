@@ -1,46 +1,16 @@
 // ==========================================
-// 💡 雲端後台設定與題目資料庫（完美校正版）
+// 💡 雲端後台設定與題目資料庫（端午專屬完美版）
 // ==========================================
 
 const BACKEND_URL = "";
 
-// 關卡二：粽子估價王（改用高相容網路圖片，確保括號與逗號語法完全正確）
+// 關卡二：粽子估價王（使用您已成功上傳的英文圖片檔名，100% 讀取成功）
 const stage2Questions = [
-  { 
-    id: 1, 
-    name: "【老協珍】鮑魚干貝粽 (2入)", 
-    options: ["NT$ 799", "NT$ 999", "NT$ 1199"], 
-    ans: 1, 
-    img: "https://images.unsplash.com/photo-1628031023194-e8c1ea9825b4?w=600&auto=format&fit=crop&q=80"
-  },
-  { 
-    id: 2, 
-    name: "【星巴克】粽夏時光禮盒 (8入)", 
-    options: ["NT$ 520", "NT$ 600", "NT$ 720"], 
-    ans: 1, 
-    img: "https://images.unsplash.com/photo-1544816155-12df9643f363?w=600&auto=format&fit=crop&q=80"
-  },
-  { 
-    id: 3, 
-    name: "【新東陽】多穀養生素粽 (全素 5入)", 
-    options: ["NT$ 350", "NT$ 450", "NT$ 550"], 
-    ans: 1, 
-    img: "https://images.unsplash.com/photo-1608686207856-001b95cf60ca?w=600&auto=format&fit=crop&q=80"
-  },
-  { 
-    id: 4, 
-    name: "【鼎泰豐】湖州鮮肉粽禮盒(5入)", 
-    options: ["NT$ 450", "NT$ 550", "NT$ 650"], 
-    ans: 1, 
-    img: "https://images.unsplash.com/photo-1511018556340-d16986a1c194?w=600&auto=format&fit=crop&q=80"
-  },
-  { 
-    id: 5, 
-    name: "【黑橋牌】府城廟口粽禮盒 (8入)", 
-    options: ["NT$ 730", "NT$ 830", "NT$ 930"], 
-    ans: 1, 
-    img: "https://images.unsplash.com/photo-1612240498936-65f5101365d2?w=600&auto=format&fit=crop&q=80"
-  }
+  { id: 1, name: "【老協珍】鮑魚干貝粽 (2入)", options: ["NT$ 799", "NT$ 999", "NT$ 1199"], ans: 1, img: "./laoxiezhen.jpg" },
+  { id: 2, name: "【星巴克】粽夏時光禮盒 (8入)", options: ["NT$ 520", "NT$ 600", "NT$ 720"], ans: 1, img: "./starbucks.jpg" },
+  { id: 3, name: "【新東陽】多穀養生素粽 (全素 5入)", options: ["NT$ 350", "NT$ 450", "NT$ 550"], ans: 1, img: "./xindongyang.jpeg" },
+  { id: 4, name: "【鼎泰豐】湖州鮮肉粽禮盒(5入)", options: ["NT$ 450", "NT$ 550", "NT$ 650"], ans: 1, img: "./dintaifung.jpeg" },
+  { id: 5, name: "【黑橋牌】府城廟口粽禮盒 (8入)", options: ["NT$ 730", "NT$ 830", "NT$ 930"], ans: 1, img: "./heiqiao.jpg" }
 ];
 
 // 關卡三：趣味問答題庫
@@ -86,10 +56,16 @@ function showScreen(id) {
   const target = document.getElementById(id);
   if (target) {
     target.classList.remove('hide');
-    target.style.display = (id === 'game-stage1') ? 'block' : 'flex';
-    
-    if (target.classList.contains('card') || target.classList.contains('screen')) {
-      target.style.display = 'block';
+    // 強制重寫外層版型，確保關卡二與關卡三在任何手機上都能垂直置中對齊
+    if (id === 'game-stage2' || id === 'game-stage3' || id === 'leaderboard-screen' || id === 'result-screen') {
+      target.style.display = 'flex';
+      target.style.flexDirection = 'column';
+      target.style.alignItems = 'center';
+      target.style.justifyContent = 'center';
+      target.style.padding = '20px';
+      target.style.boxSizing = 'border-box';
+    } else {
+      target.style.display = (id === 'game-stage1') ? 'block' : 'flex';
     }
   }
 }
@@ -224,7 +200,7 @@ function showLeaderboardPage(titleText) {
   document.getElementById('leaderboard-title').innerText = titleText;
   document.getElementById('current-user-total').innerText = userTotalScore;
   
-  let html = `<div class="rank-item" style="background: rgba(231, 76, 60, 0.15); font-weight: bold; border-radius:6px; padding: 10px; margin: 10px 0; display: flex; justify-content: space-between;">
+  let html = `<div class="rank-item" style="background: rgba(231, 76, 60, 0.15); font-weight: bold; border-radius:6px; padding: 12px; margin: 10px 0; width: 100%; max-width: 320px; display: flex; justify-content: space-between; box-sizing: border-box;">
                 <span>⭐ ${pName} (您)</span>
                 <span>${userTotalScore} 分</span>
               </div>`;
@@ -243,7 +219,7 @@ function goToNextStage() {
 }
 
 // ------------------------------------------
-// 第二關：粽子估價王
+// 第二關：粽子估價王（強制 RWD 版型約束）
 // ------------------------------------------
 function initStage2() {
   const q = stage2Questions[s2CurrentIdx];
@@ -253,14 +229,28 @@ function initStage2() {
   const imgTag = document.getElementById('stage2-img');
   if(imgTag) {
     imgTag.src = q.img; 
+    // 強制約束圖片外觀尺寸與居中，防止版型因載入問題而錯位
     imgTag.style.display = 'block'; 
+    imgTag.style.width = '100%';
+    imgTag.style.maxWidth = '260px';
+    imgTag.style.height = '180px';
+    imgTag.style.objectFit = 'cover';
+    imgTag.style.margin = '15px auto';
+    imgTag.style.borderRadius = '8px';
+    imgTag.style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)';
   }
   
   let optionsHtml = "";
   q.options.forEach((opt, idx) => {
-    optionsHtml += `<button class="choice-btn" id="s2-opt-${idx}" onclick="checkStage2Answer(${idx})" style="width:100%; padding:10px; margin:5px 0; border-radius:6px; border:1px solid #ccc; background:#fff; font-size:16px;">${idx + 1}. ${opt}</button>`;
+    optionsHtml += `<button class="choice-btn" id="s2-opt-${idx}" onclick="checkStage2Answer(${idx})" style="width:100%; max-width:300px; padding:12px; margin:8px auto; display:block; border-radius:8px; border:1px solid #ddd; background:#fff; font-size:16px; font-weight:bold; box-shadow: 0 2px 4px rgba(0,0,0,0.05); cursor:pointer; transition: all 0.2s;">${idx + 1}. ${opt}</button>`;
   });
-  document.getElementById('stage2-options').innerHTML = optionsHtml;
+  
+  const optionsContainer = document.getElementById('stage2-options');
+  if(optionsContainer) {
+    optionsContainer.innerHTML = optionsHtml;
+    optionsContainer.style.width = '100%';
+    optionsContainer.style.textAlign = 'center';
+  }
   isAllowClick = true;
 }
 
@@ -275,9 +265,11 @@ function checkStage2Answer(chosenIdx) {
     if (idx === q.ans) {
       btn.style.background = '#2ecc71'; 
       btn.style.color = '#fff';
+      btn.style.borderColors = '#2ecc71';
     } else if (idx === chosenIdx) {
       btn.style.background = '#e74c3c'; 
       btn.style.color = '#fff';
+      btn.style.borderColors = '#e74c3c';
     }   
   });
 
@@ -307,69 +299,4 @@ function initStage3() {
     const t3El = document.getElementById('timer3');
     if(t3El) t3El.innerText = `⏱️ 剩餘時間: ${s3Timer} 秒`;
     if(s3Timer <= 0) endStage3();
-  }, 1000);
-  renderStage3Question();
-}
-
-function renderStage3Question() {
-  if(s3CurrentIdx >= stage3Questions.length) {
-    endStage3();
-    return;
-  }
-  const q = stage3Questions[s3CurrentIdx];
-  document.getElementById('stage3-title').innerText = `第 ${s3CurrentIdx + 1} / 10 題`;
-  document.getElementById('stage3-question').innerText = q.q;
-  
-  let optionsHtml = "";
-  q.options.forEach((opt, idx) => {
-    optionsHtml += `<button class="choice-btn" id="s3-opt-${idx}" onclick="checkStage3Answer(${idx})" style="width:100%; padding:10px; margin:5px 0; border-radius:6px; border:1px solid #ccc; background:#fff; font-size:16px;">${idx + 1}. ${opt}</button>`;
-  });
-  document.getElementById('stage3-options').innerHTML = optionsHtml;
-  isAllowClick = true;
-}
-
-function checkStage3Answer(chosenIdx) {
-  if (!isAllowClick) return;
-  isAllowClick = false;
-  
-  const q = stage3Questions[s3CurrentIdx];
-  const buttons = document.querySelectorAll('#stage3-options .choice-btn');
-  
-  buttons.forEach((btn, idx) => {
-    if (idx === q.ans) {
-      btn.style.background = '#2ecc71';
-      btn.style.color = '#fff';
-    } else if (idx === chosenIdx) {
-      btn.style.background = '#e74c3c';
-      btn.style.color = '#fff';
-    }
-  });
-
-  if(chosenIdx === q.ans) s3CorrectCount++;
-  s3CurrentIdx++;
-  
-  setTimeout(() => { renderStage3Question(); }, 1500);
-}
-
-// ------------------------------------------
-// 👑 終極結算頁面
-// ------------------------------------------
-function endStage3() {
-  clearInterval(s3Interval);
-  let s3Score = s3CorrectCount * 30; 
-  userTotalScore += s3Score;
-  currentStageNum = 3;
-  
-  showScreen('result-screen');
-  document.getElementById('result-welcome').innerText = `🎖️ 挑戰大俠：${pName}`;
-  document.getElementById('res-final-total').innerText = userTotalScore + " 分";
-  
-  document.getElementById('final-rank-list').innerHTML = `
-    <div class="rank-item" style="background: rgba(46, 204, 113, 0.15); font-weight: bold; border-radius: 6px; padding: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
-      <span>🏆 您的最終榮譽總分</span>
-      <span style="font-size: 22px; color: #27ae60;">${userTotalScore} 分</span>
-    </div>
-    <div style="text-align:center; color:#2980b9; font-weight:bold; font-size:14px; background:#e1f5fe; padding:10px; border-radius:6px;">
-      📢 請向現場主持人報上您的姓名與總分，即可手動更新排行榜大螢幕！
-    </div>`;
-}
+  }, 100
