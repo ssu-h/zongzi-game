@@ -67,20 +67,44 @@ function initStage1() {
 
 function gameLoop() {
   ctx.clearRect(0, 0, 320, 320);
-  ctx.fillStyle = '#d35400'; ctx.fillRect(boat.x, boat.y, boat.w, boat.h);
+  
+  // 繪製龍舟 (船)
+  ctx.fillStyle = '#d35400'; 
+  ctx.fillRect(boat.x, boat.y, boat.w, boat.h);
+  
+  // 繪製掉落物
   items.forEach((item, i) => {
     item.y += item.speed;
-    ctx.fillStyle = item.type === 'zongzi' ? '#27ae60' : (item.type === 'sauce' ? '#e74c3c' : '#7f8c8d');
-    ctx.fillRect(item.x, item.y, 20, 20);
+    
+    // 根據類型給予不同顏色或形狀
+    if (item.type === 'zongzi') {
+      ctx.fillStyle = '#27ae60'; // 粽子綠
+      ctx.beginPath();
+      ctx.moveTo(item.x + 10, item.y); // 三角形粽子
+      ctx.lineTo(item.x, item.y + 20);
+      ctx.lineTo(item.x + 20, item.y + 20);
+      ctx.fill();
+    } else if (item.type === 'sauce') {
+      ctx.fillStyle = '#e74c3c'; // 醬料紅
+      ctx.fillRect(item.x, item.y, 20, 20);
+    } else {
+      ctx.fillStyle = '#7f8c8d'; // 石頭灰
+      ctx.arc(item.x + 10, item.y + 10, 10, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    
+    // 碰撞偵測
     if(item.y > 270 && item.y < 300 && item.x > boat.x - 20 && item.x < boat.x + boat.w) {
-      if(item.type === 'zongzi') s1Score += 10; else if(item.type === 'sauce') s1Score -= 10; else s1Score -= 20;
+      if(item.type === 'zongzi') s1Score += 10; 
+      else if(item.type === 'sauce') s1Score -= 10; 
+      else s1Score -= 20;
       document.getElementById('score1').innerText = `得分: ${Math.max(0, s1Score)}`;
       items.splice(i, 1);
     }
   });
+  
   if(s1Timer > 0) gameLoopId = requestAnimationFrame(gameLoop);
 }
-
 function endStage1() {
   clearInterval(s1Interval); clearInterval(spawnInterval); cancelAnimationFrame(gameLoopId);
   userTotalScore = Math.max(0, s1Score); showLeaderboardPage("🛶 第一關：龍舟接粽 結束");
