@@ -8,7 +8,7 @@
   <style>
     /* 防止手機雙擊放大與瀏覽器預設下拉整理 */
     html, body { touch-action: none; overflow: hidden; position: fixed; width: 100%; height: 100%; }
-    .choice-btn { background:#fff; color:var(--primary); border:2px solid var(--primary); text-align:left; padding:12px; font-size:16px; border-radius:8px; cursor:pointer; width:100%; transition: all 0.2s; }
+    .choice-btn { background:#fff; color:var(--primary); border:2px solid var(--primary); text-align:left; padding:12px; font-size:16px; border-radius:8px; cursor:pointer; width:100%; transition: all 0.2s; margin-bottom: 10px; }
     
     /* 答題回饋動態樣式 */
     .choice-btn.correct { background-color: #2ecc71 !important; color: white !important; border-color: #27ae60 !important; font-weight: bold; }
@@ -37,11 +37,6 @@
         <span id="timer1">⏱️ 剩餘時間: 50 秒</span>
         <span id="score1">得分: 0</span>
       </div>
-      <p style="font-size: 13px; color: #d35400; font-weight: bold; margin-bottom: 8px; text-align: left;">
-        🟢 綠色三角形：<b>粽子 (+10分)</b><br>
-        🔴 紅色圓形：<b>甜辣醬 (-10分)</b> | 🟤 灰色正方形：<b>石頭 (-20分)</b>
-      </p>
-      
       <canvas id="gameCanvas" width="320" height="320" style="background: #e3f2fd; border: 2px solid var(--primary); border-radius: 8px; width: 100%; max-width: 320px;"></canvas>
     </div>
 
@@ -50,8 +45,7 @@
       <div style="background: #f9f9f9; padding: 12px; border-radius: 8px; margin-bottom: 15px; font-size: 16px;">
         您的當前總積分：<strong id="current-user-total" style="color: var(--accent); font-size: 22px;">0</strong> 分
       </div>
-      <div id="stage-rank-list" class="rank-list"></div>
-      <button id="next-stage-btn" onclick="goToNextStage()" style="margin-top: 20px; background: var(--primary);">進入下一關卡 🚀</button>
+      <button id="next-stage-btn" onclick="goToNextStage()" style="background: var(--primary);">進入下一關卡 🚀</button>
     </div>
 
     <div id="game-stage2" class="card hide">
@@ -59,8 +53,7 @@
       <h3 id="stage2-title">第 1 / 5 題</h3>
       <div class="img-box"><img id="stage2-img" src="" alt="粽子" style="max-height: 160px; object-fit: contain;"></div>
       <h2 id="stage2-name" style="font-size: 18px; margin-bottom: 10px;">粽子名稱</h2>
-      <p style="font-weight: bold; margin-bottom: 15px; color: #2c3e50;">請選擇這組粽子的官方新台幣售價：</p>
-      <div id="stage2-options" style="display: flex; flex-direction: column; gap: 10px;"></div>
+      <div id="stage2-options"></div>
     </div>
 
     <div id="game-stage3" class="card hide">
@@ -69,23 +62,21 @@
         <span id="timer3">⏱️ 剩餘時間: 60 秒</span>
         <span id="stage3-title">第 1 / 10 題</span>
       </div>
-      <h2 id="stage3-question" style="font-size: 19px; margin-bottom: 20px; text-align: left; min-height: 50px;">問題載入中...</h2>
-      <div id="stage3-options" style="display: flex; flex-direction: column; gap: 10px;"></div>
+      <h2 id="stage3-question" style="font-size: 19px; margin-bottom: 20px;">問題載入中...</h2>
+      <div id="stage3-options"></div>
     </div>
 
     <div id="result-screen" class="card hide">
       <div class="title-banner">🏆 榮耀終點站 🏆</div>
-      <h2 id="result-welcome" style="color: var(--secondary); margin-bottom: 15px;"></h2>
+      <h2 id="result-welcome" style="color: var(--secondary);"></h2>
       <div style="background: #fffde7; padding: 20px; border-radius: 10px; border: 2px solid var(--secondary);">
-        <div style="font-size: 20px; font-weight: bold; text-align: center; color: #2c3e50;">👑 您的終極挑戰總分</div>
-        <div style="font-size: 42px; font-weight: bold; text-align: center; color: #e74c3c; margin: 10px 0;" id="res-final-total">0</div>
+        <div style="font-size: 20px; font-weight: bold; color: #2c3e50;">您的終極總分</div>
+        <div style="font-size: 42px; font-weight: bold; color: #e74c3c;" id="res-final-total">0</div>
       </div>
-      
-      <p style="color: #7f8c8d; font-size: 14px; margin-top: 25px; font-weight: bold; background: #f2f2f2; padding: 10px; border-radius: 6px;">🎉 挑戰結束！每人僅能遊玩一次，請立即「截圖本畫面」傳至群組登記爭奪大獎！</p>
+      <p style="font-size: 14px; color: #7f8c8d; margin-top: 20px;">🎉 請截圖本畫面回傳登記！</p>
     </div>
 
   </div>
-
   <script src="config.js"></script>
 </body>
 </html>
