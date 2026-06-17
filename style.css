@@ -1,127 +1,99 @@
-/* 基礎設定 */
 :root {
-  --primary: #2c3e50;
-  --secondary: #e67e22;
-  --accent: #e74c3c;
-  --bg-color: #f4f7f6;
+    --primary: #5a8a6e;      /* 文青深綠 */
+    --secondary: #d4a373;    /* 大地色/黃褐 */
+    --accent: #e9c46a;       /* 明亮黃 */
+    --bg-color: #fefcf5;     /* 米白底色 */
+    --text-color: #4a4a4a;   /* 深灰文字 */
 }
-
-* { box-sizing: border-box; touch-action: manipulation; }
 
 body {
-  margin: 0;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  background-color: var(--bg-color);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  overflow: hidden;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
-.container { width: 100%; display: flex; justify-content: center; }
+.container {
+    width: 90%;
+    max-width: 400px;
+}
 
-/* 卡片樣式 */
 .card {
-  background: white;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  width: 90%;
-  max-width: 400px;
-  text-align: center;
-  position: absolute;
+    background: #fff;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    border: 1px solid #eee;
+    text-align: center;
 }
 
 .hide { display: none; }
 
-/* 標題與按鈕 */
 .title-banner {
-  font-size: 24px;
-  font-weight: bold;
-  color: var(--primary);
-  margin-bottom: 20px;
-  border-bottom: 2px solid var(--secondary);
-  padding-bottom: 10px;
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--primary);
+    margin-bottom: 20px;
+    border-bottom: 2px dashed var(--secondary);
+    padding-bottom: 10px;
 }
 
-button {
-  background: var(--secondary);
-  color: white;
-  border: none;
-  padding: 12px 25px;
-  font-size: 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  width: 100%;
-  font-weight: bold;
+.stage-badge {
+    background: var(--primary);
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    display: inline-block;
+    margin-bottom: 15px;
+    font-size: 14px;
 }
 
 input {
-  width: 100%;
-  padding: 12px;
-  margin-bottom: 15px;
-  border: 2px solid #ddd;
-  border-radius: 8px;
-  font-size: 16px;
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-size: 16px;
 }
 
-/* 關卡與圖片樣式 */
-.stage-badge {
-  background: var(--secondary);
-  color: white;
-  padding: 5px 15px;
-  border-radius: 20px;
-  display: inline-block;
-  margin-bottom: 15px;
-  font-weight: bold;
+button {
+    width: 100%;
+    padding: 12px;
+    background: var(--secondary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+button:hover {
+    background: #c18e5e;
 }
 
 .img-box {
-  background: #eee;
-  border-radius: 8px;
-  margin-bottom: 15px;
-  overflow: hidden;
-  height: 160px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    margin: 10px 0;
+    background: #fdfdfd;
+    padding: 10px;
+    border-radius: 10px;
 }
 
-/* 答題按鈕回饋 (綠色正確/紅色錯誤) */
-.choice-btn {
-  background: #fff;
-  color: var(--primary);
-  border: 2px solid var(--primary);
-  text-align: left;
-  padding: 12px;
-  font-size: 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  width: 100%;
-  transition: all 0.2s;
-  margin-top: 8px;
+.rank-list {
+    margin-top: 10px;
+    text-align: left;
 }
 
-.choice-btn.correct {
-  background-color: #2ecc71 !important;
-  color: white !important;
-  border-color: #27ae60 !important;
-  font-weight: bold;
-}
-
-.choice-btn.wrong {
-  background-color: #e74c3c !important;
-  color: white !important;
-  border-color: #c0392b !important;
-  opacity: 0.7;
-}
-
-/* 排行榜列表 */
-.rank-list { margin-top: 10px; text-align: left; }
 .rank-item {
-  display: flex;
-  justify-content: space-between;
-  padding: 10px;
-  border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    padding: 8px;
+    border-bottom: 1px solid #f0f0f0;
 }
