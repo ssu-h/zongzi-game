@@ -1,8 +1,65 @@
-:root { --bg: #fffcf0; --green: #556b2f; --yellow: #f4d03f; }
-body { background: var(--bg); color: #333; font-family: sans-serif; text-align: center; }
-#game-container { width: 90%; max-width: 500px; margin: 30px auto; background: white; padding: 20px; border: 2px solid var(--green); border-radius: 15px; }
-.hidden { display: none; }
-#game-area { height: 400px; position: relative; overflow: hidden; margin: 20px 0; border: 1px solid #ccc; background: #eef; }
-.boat { position: absolute; bottom: 10px; width: 60px; height: 30px; background: var(--green); color: white; border-radius: 5px; }
-.obstacle { position: absolute; width: 30px; height: 30px; background: red; }
-.option-btn { display: block; width: 80%; margin: 8px auto; padding: 10px; cursor: pointer; border: 1px solid var(--green); }
+body{
+background:#f7f4df;
+font-family:微軟正黑體;
+text-align:center;
+margin:0;
+color:#355c3d;
+}
+
+.container{
+max-width:800px;
+margin:auto;
+padding:20px;
+}
+
+h1{
+color:#698b22;
+}
+
+button{
+background:#d9b44a;
+border:none;
+padding:15px 25px;
+border-radius:10px;
+font-size:18px;
+margin:8px;
+cursor:pointer;
+}
+
+button:hover{
+background:#c49a1c;
+}
+
+input{
+padding:12px;
+font-size:18px;
+width:220px;
+border-radius:8px;
+}
+
+#gameCanvas{
+background:#fff;
+border:3px solid #698b22;
+}
+
+.optionBtn{
+display:block;
+width:300px;
+margin:10px auto;
+}
+
+img{
+width:250px;
+border-radius:15px;
+}
+
+.correct{
+color:green;
+font-size:22px;
+font-weight:bold;
+}
+
+.score{
+font-size:24px;
+margin-top:20px;
+}
