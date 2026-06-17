@@ -1,351 +1,94 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-TW">
 <head>
-<meta charset="UTF-8">
-<title>端午全能挑戰賽</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>🎋 端午一粽值千金 🎋</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* 防止手機雙擊放大與瀏覽器預設下拉整理 */
+    html, body { touch-action: none; overflow: hidden; position: fixed; width: 100%; height: 100%; }
+    .choice-btn { background:#fff; color:var(--primary); border:2px solid var(--primary); text-align:left; padding:12px; font-size:16px; border-radius:8px; cursor:pointer; width:100%; transition: all 0.2s; }
+    
+    /* 答題回饋動態樣式 */
+    .choice-btn.correct { background-color: #2ecc71 !important; color: white !important; border-color: #27ae60 !important; font-weight: bold; }
+    .choice-btn.wrong { background-color: #e74c3c !important; color: white !important; border-color: #c0392b !important; opacity: 0.6; }
+  </style>
 </head>
 <body>
-
-<div class="container">
-
-<div id="home">
-
-<h1>歡迎參加端午全能挑戰賽！</h1>
-
-<h2>
-1️⃣ 龍舟接粽子<br><br>
-2️⃣ 粽子估價王<br><br>
-3️⃣ 端午趣味答題
-</h2>
-
-<h3>⚠️ 每人僅限挑戰一次</h3>
-
-<input id="playerName" placeholder="請輸入姓名">
-
-<br><br>
-
-<button onclick="startStage1()">開始挑戰</button>
-
-</div>
-
-<div id="stage1" style="display:none">
-
-<h1>第一關 龍舟接粽子</h1>
-
-<h2>剩餘時間：<span id="time1">40</span></h2>
-
-<canvas id="gameCanvas" width="700" height="500"></canvas>
-
-</div>
-
-<div id="stage2" style="display:none">
-<h1>第二關 粽子估價王</h1>
-
-<h2 id="priceNum"></h2>
-
-<img id="priceImg">
-
-<h3 id="priceTitle"></h3>
-
-<div id="priceOptions"></div>
-
-<h2 id="priceResult"></h2>
-
-</div>
-
-<div id="stage3" style="display:none">
-<h1>第三關 端午趣味答題</h1>
-
-<h2>剩餘時間：<span id="time3">50</span></h2>
-
-<h2 id="quizNum"></h2>
-
-<h3 id="quizTitle"></h3>
-
-<div id="quizOptions"></div>
-
-<h2 id="quizResult"></h2>
-
-</div>
-
-<div id="final" style="display:none">
-<h1>挑戰完成</h1>
-
-<h2 id="player"></h2>
-
-<h2 id="score1"></h2>
-<h2 id="score2"></h2>
-<h2 id="score3"></h2>
-
-<h1 id="total"></h1>
-
-</div>
-
-</div>
-
-<script src="config.js"></script>
-
-<script>
-
-let stage1Score=0;
-let stage2Score=0;
-let stage3Score=0;
-
-let canvas=document.getElementById("gameCanvas");
-let ctx=canvas.getContext("2d");
-
-let boatX=300;
-
-let zongzis=[];
-let rocks=[];
-
-document.addEventListener("keydown",e=>{
-if(e.key==="ArrowLeft") boatX-=25;
-if(e.key==="ArrowRight") boatX+=25;
-});
-
-function startStage1(){
-
-home.style.display="none";
-stage1.style.display="block";
-
-let time=40;
-
-let timer=setInterval(()=>{
-time--;
-time1.innerHTML=time;
-
-if(time<=0){
-clearInterval(timer);
-clearInterval(gameLoop);
-
-stage1.style.display="none";
-startStage2();
-}
-
-},1000);
-
-gameLoop=setInterval(drawGame,30);
-
-}
-
-function drawGame(){
-
-ctx.clearRect(0,0,700,500);
-
-ctx.fillStyle="brown";
-ctx.fillRect(boatX,450,100,30);
-
-if(Math.random()<0.03){
-zongzis.push({
-x:Math.random()*650,
-y:0
-});
-}
-
-if(Math.random()<0.02){
-rocks.push({
-x:Math.random()*650,
-y:0
-});
-}
-
-ctx.fillStyle="green";
-
-zongzis.forEach(z=>{
-
-z.y+=5;
-
-ctx.beginPath();
-ctx.arc(z.x,z.y,15,0,2*Math.PI);
-ctx.fill();
-
-if(z.y>440 && z.x>boatX && z.x<boatX+100){
-stage1Score+=10;
-z.y=600;
-}
-
-});
-
-ctx.fillStyle="red";
-
-rocks.forEach(r=>{
-
-r.y+=6;
-
-ctx.fillRect(r.x,r.y,25,25);
-
-if(r.y>440 && r.x>boatX && r.x<boatX+100){
-stage1Score-=5;
-r.y=600;
-}
-
-});
-
-ctx.font="24px Arial";
-ctx.fillText("分數："+stage1Score,20,40);
-
-}
-
-let priceIndex=0;
-
-function startStage2(){
-
-stage2.style.display="block";
-
-showPrice();
-
-}
-
-function showPrice(){
-
-if(priceIndex>=5){
-
-stage2.style.display="none";
-startStage3();
-return;
-}
-
-let q=priceQuestions[priceIndex];
-
-priceNum.innerHTML="第 "+(priceIndex+1)+" 題";
-
-priceImg.src=q.image;
-
-priceTitle.innerHTML=q.name;
-
-priceOptions.innerHTML="";
-priceResult.innerHTML="";
-
-q.options.forEach(op=>{
-
-priceOptions.innerHTML+=`
-<button class='optionBtn'
-onclick='checkPrice("${op}")'>
-$${op}
-</button>
-`;
-
-});
-
-}
-
-function checkPrice(op){
-
-let q=priceQuestions[priceIndex];
-
-if(op===q.answer){
-stage2Score+=20;
-}
-
-priceResult.innerHTML=
-"正確答案：$"+q.answer;
-
-setTimeout(()=>{
-priceIndex++;
-showPrice();
-},1500);
-
-}
-
-let quizIndex=0;
-
-function startStage3(){
-
-stage3.style.display="block";
-
-let time=50;
-
-let timer=setInterval(()=>{
-
-time--;
-time3.innerHTML=time;
-
-if(time<=0){
-clearInterval(timer);
-finishGame();
-}
-
-},1000);
-
-showQuiz();
-
-}
-
-function showQuiz(){
-
-if(quizIndex>=10){
-finishGame();
-return;
-}
-
-let q=quizQuestions[quizIndex];
-
-quizNum.innerHTML="第 "+(quizIndex+1)+" 題";
-
-quizTitle.innerHTML=q.q;
-
-quizOptions.innerHTML="";
-quizResult.innerHTML="";
-
-q.options.forEach(op=>{
-
-quizOptions.innerHTML+=`
-<button class='optionBtn'
-onclick='checkQuiz("${op}")'>
-${op}
-</button>
-`;
-
-});
-
-}
-
-function checkQuiz(op){
-
-let q=quizQuestions[quizIndex];
-
-if(op===q.answer){
-stage3Score+=10;
-}
-
-quizResult.innerHTML=
-"正確答案："+q.answer;
-
-setTimeout(()=>{
-
-quizIndex++;
-
-showQuiz();
-
-},1000);
-
-}
-
-function finishGame(){
-
-stage3.style.display="none";
-final.style.display="block";
-
-player.innerHTML=
-document.getElementById("playerName").value;
-
-score1.innerHTML=
-"第一關："+stage1Score;
-
-score2.innerHTML=
-"第二關："+stage2Score;
-
-score3.innerHTML=
-"第三關："+stage3Score;
-
-total.innerHTML=
-"總分："+(stage1Score+stage2Score+stage3Score);
-
-}
-
-</script>
-
+  <div class="container">
+    
+    <div id="start-screen" class="card">
+      <div class="title-banner">🎋 一粽值千金 🎋</div>
+      <p style="font-size: 16px; line-height: 1.8; text-align: left; background: #fffde7; padding: 15px; border-radius: 8px; border-left: 4px solid var(--secondary); margin-bottom: 20px;">
+        歡迎參加端午全能挑戰賽！本遊戲共有三大關卡：<br>
+        1️⃣ <b>龍舟接粽子</b><br>
+        2️⃣ <b>粽子估價王</b><br>
+        3️⃣ <b>端午趣味答題</b><br>
+        ⚠️ <b>注意：每人僅限挑戰一次！</b>
+      </p>
+      <input type="text" id="player-name" placeholder="請輸入您的姓名">
+      <button onclick="startGame()">開始挑戰</button>
+    </div>
+
+    <div id="game-stage1" class="card hide">
+      <div class="stage-badge">關卡一：龍舟接粽子</div>
+      <div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: bold;">
+        <span id="timer1">⏱️ 剩餘時間: 40 秒</span>
+        <span id="score1">得分: 0</span>
+      </div>
+      <p style="font-size: 13px; color: #d35400; font-weight: bold; margin-bottom: 8px; text-align: left;">
+        🟢 綠色三角形：<b>粽子 (+10分)</b><br>
+        🔴 紅色圓形：<b>甜辣醬 (-10分)</b> | 🟤 灰色正方形：<b>石頭 (-20分)</b>
+      </p>
+      
+      <canvas id="gameCanvas" width="320" height="320" style="background: #e3f2fd; border: 2px solid var(--primary); border-radius: 8px; width: 100%; max-width: 320px;"></canvas>
+    </div>
+
+    <div id="leaderboard-screen" class="card hide">
+      <div class="title-banner" id="leaderboard-title">📊 關卡結算</div>
+      <div style="background: #f9f9f9; padding: 12px; border-radius: 8px; margin-bottom: 15px; font-size: 16px;">
+        您的當前總積分：<strong id="current-user-total" style="color: var(--accent); font-size: 22px;">0</strong> 分
+      </div>
+      <h3 style="margin-top: 15px; text-align: left;">🏆 公司風雲排行榜 (前5名)</h3>
+      <div id="stage-rank-list" class="rank-list"></div>
+      <button id="next-stage-btn" onclick="goToNextStage()" style="margin-top: 20px; background: var(--primary);">進入下一關卡 🚀</button>
+    </div>
+
+    <div id="game-stage2" class="card hide">
+      <div class="stage-badge">關卡二：粽子估價王</div>
+      <h3 id="stage2-title">第 1 / 5 題</h3>
+      <div class="img-box"><img id="stage2-img" src="" alt="粽子" style="max-height: 160px; object-fit: contain;"></div>
+      <h2 id="stage2-name" style="font-size: 18px; margin-bottom: 10px;">粽子名稱</h2>
+      <p style="font-weight: bold; margin-bottom: 15px; color: #2c3e50;">請選擇這組粽子的官方新台幣售價：</p>
+      <div id="stage2-options" style="display: flex; flex-direction: column; gap: 10px;"></div>
+    </div>
+
+    <div id="game-stage3" class="card hide">
+      <div class="stage-badge">關卡三：端午趣味答題</div>
+      <div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: bold;">
+        <span id="timer3">⏱️ 剩餘時間: 50 秒</span>
+        <span id="stage3-title">第 1 / 10 題</span>
+      </div>
+      <h2 id="stage3-question" style="font-size: 19px; margin-bottom: 20px; text-align: left; min-height: 50px;">問題載入中...</h2>
+      <div id="stage3-options" style="display: flex; flex-direction: column; gap: 10px;"></div>
+    </div>
+
+    <div id="result-screen" class="card hide">
+      <div class="title-banner">🏆 榮耀終點站 🏆</div>
+      <h2 id="result-welcome" style="color: var(--secondary); margin-bottom: 15px;"></h2>
+      <div style="background: #fffde7; padding: 20px; border-radius: 10px; border: 2px solid var(--secondary);">
+        <div style="font-size: 20px; font-weight: bold; text-align: center; color: #2c3e50;">👑 您的終極挑戰總分</div>
+        <div style="font-size: 42px; font-weight: bold; text-align: center; color: #e74c3c; margin: 10px 0;" id="res-final-total">0</div>
+      </div>
+      
+      <h3 style="margin-top: 25px; text-align: left;">🏆 最終全場總排行榜 (前5名)</h3>
+      <div id="final-rank-list" class="rank-list"></div>
+      <p style="color: #7f8c8d; font-size: 14px; margin-top: 25px; font-weight: bold; background: #f2f2f2; padding: 10px; border-radius: 6px;">🎉 挑戰結束！每人僅能遊玩一次，請立即「截圖本畫面」傳至群組登記爭奪大獎！</p>
+    </div>
+
+  </div>
+
+  <script src="config.js"></script>
 </body>
 </html>
