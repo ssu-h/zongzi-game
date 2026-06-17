@@ -1,6 +1,7 @@
 // ==========================================
 // 💡 關卡題目資料庫
 // ==========================================
+// --- 題庫資料 (保持不變) ---
 const stage2Questions = [
     { name: "【老協珍】鮑魚干貝粽", ans: 999, opts: [699, 999, 1299], img: "laoxiezhen.jpg" },
     { name: "【星巴克】粽夏時光禮盒", ans: 600, opts: [400, 600, 800], img: "starbucks.jpg" },
@@ -22,18 +23,46 @@ const stage3Questions = [
     { q: "下列哪一個不是端午節的別稱？", options: ["端陽節", "重五節", "中元節"], ans: 2 }
 ];
 
+// --- 遊戲邏輯 ---
 let score = 0, currentStage = 1, s2Idx = 0, s3Idx = 0;
+let boatX = 130, canvas, ctx, s1Timer = 40;
 
 function startGame() {
     document.getElementById('start-screen').classList.add('hide');
     document.getElementById('game-stage1').classList.remove('hide');
-    // 這裡放入龍舟遊戲邏輯...
+    initStage1();
+}
+
+function initStage1() {
+    canvas = document.getElementById('gameCanvas');
+    ctx = canvas.getContext('2d');
+    
+    // 綁定滑鼠/觸控移動
+    canvas.addEventListener('mousemove', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        boatX = e.clientX - rect.left - 35;
+    });
+
+    // 簡單的遊戲迴圈
+    setInterval(() => {
+        if (s1Timer <= 0) {
+            showLeaderboardPage("第一關結束");
+            return;
+        }
+        s1Timer--;
+        document.getElementById('timer1').innerText = `⏱️ 剩餘時間: ${s1Timer} 秒`;
+        drawGame();
+    }, 1000);
+}
+
+function drawGame() {
+    ctx.clearRect(0, 0, 320, 320);
+    ctx.fillStyle = '#58D68D'; // 龍舟顏色
+    ctx.fillRect(Math.max(0, Math.min(250, boatX)), 280, 70, 20);
 }
 
 function showLeaderboardPage(msg) {
     document.getElementById('game-stage1').classList.add('hide');
-    document.getElementById('game-stage2').classList.add('hide');
-    document.getElementById('game-stage3').classList.add('hide');
     document.getElementById('leaderboard-screen').classList.remove('hide');
     document.getElementById('leaderboard-title').innerText = msg;
     document.getElementById('current-user-total').innerText = score;
@@ -55,7 +84,7 @@ function goToNextStage() {
 function renderS2() {
     const q = stage2Questions[s2Idx];
     document.getElementById('stage2-name').innerText = q.name;
-    document.getElementById('stage2-img').src = "images/" + q.img;
+    document.getElementById('stage2-img').src = q.img; // 請確保 GitHub 圖片路徑正確
     let html = q.opts.map((o, i) => `<button class="choice-btn" onclick="checkS2(${i}, ${o === q.ans})">${o}</button>`).join('');
     document.getElementById('stage2-options').innerHTML = html;
 }
