@@ -1,22 +1,25 @@
+/* 顏色變數設定 */
 :root {
     --primary: #5a8a6e;      /* 文青深綠 */
     --secondary: #d4a373;    /* 大地色/黃褐 */
-    --accent: #e9c46a;       /* 明亮黃 */
     --bg-color: #fefcf5;     /* 米白底色 */
     --text-color: #4a4a4a;   /* 深灰文字 */
 }
 
+/* 基礎設定 */
 body {
     background-color: var(--bg-color);
     color: var(--text-color);
     font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif;
     margin: 0;
+    overflow: hidden; /* 防止遊戲時畫面捲動 */
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
 }
 
+/* 容器與卡片風格 */
 .container {
     width: 90%;
     max-width: 400px;
@@ -26,11 +29,12 @@ body {
     background: #fff;
     padding: 20px;
     border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-    border: 1px solid #eee;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     text-align: center;
+    border: 1px solid #eee;
 }
 
+/* 功能類別 */
 .hide { display: none; }
 
 .title-banner {
@@ -43,16 +47,16 @@ body {
 }
 
 .stage-badge {
-    background: #5a8a6e; /* 文青綠 */
+    background: var(--primary);
     color: white;
     padding: 5px 15px;
     border-radius: 20px;
     display: inline-block;
     margin-bottom: 15px;
     font-size: 14px;
-    text-align: center;
 }
 
+/* 輸入框與按鈕 */
 input {
     width: 100%;
     padding: 12px;
@@ -80,21 +84,28 @@ button:hover {
     background: #c18e5e;
 }
 
-.img-box {
-    margin: 10px 0;
-    background: #fdfdfd;
-    padding: 10px;
-    border-radius: 10px;
+/* 遊戲畫布與選項按鈕 */
+canvas {
+    background: #e3f2fd;
+    border: 2px solid var(--primary);
+    border-radius: 8px;
+    width: 100%;
+    touch-action: none; /* 關鍵：防止觸控移動時整頁晃動 */
 }
 
-.rank-list {
-    margin-top: 10px;
+.choice-btn {
+    background: #fff;
+    border: 2px solid var(--primary);
+    color: var(--primary);
+    padding: 12px;
+    margin-bottom: 10px;
+    width: 100%;
+    border-radius: 8px;
+    cursor: pointer;
     text-align: left;
+    font-size: 16px;
 }
 
-.rank-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 8px;
-    border-bottom: 1px solid #f0f0f0;
+.choice-btn:hover {
+    background: #f0f7f3;
 }
