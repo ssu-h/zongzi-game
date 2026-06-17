@@ -43,13 +43,14 @@ body {
 }
 
 .stage-badge {
-    background: var(--primary);
+    background: #5a8a6e; /* 文青綠 */
     color: white;
     padding: 5px 15px;
     border-radius: 20px;
     display: inline-block;
     margin-bottom: 15px;
     font-size: 14px;
+    text-align: center;
 }
 
 input {
