@@ -10,33 +10,32 @@
   <div class="container">
     <div id="start-screen" class="card">
       <div class="title-banner">🎋 一粽值千金 🎋</div>
-      <p style="font-size: 15px; line-height: 1.6; text-align: left; background: #fffde7; padding: 15px; border-radius: 8px;">
-        歡迎參加端午全能挑戰賽！<br>
+      <p style="font-size: 15px; text-align: left; background: #fffde7; padding: 15px; border-radius: 8px;">
+        歡迎參加端午挑戰賽！<br>
         1️⃣ 龍舟接粽子<br>
         2️⃣ 粽子估價王<br>
-        3️⃣ 端午趣味答題<br>
-        ⚠️ 每人僅限挑戰一次！
+        3️⃣ 端午趣味答題
       </p>
-      <input type="text" id="player-name" placeholder="請輸入姓名" style="width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px;">
-      <button onclick="startGame()" style="width: 100%; padding: 12px; background: #58D68D; color: white; border: none; border-radius: 5px; cursor: pointer;">開始挑戰</button>
+      <input type="text" id="player-name" placeholder="請輸入姓名">
+      <button onclick="startGame()">開始挑戰</button>
     </div>
 
     <div id="game-stage1" class="card hide">
       <div class="stage-badge">關卡一：龍舟接粽子</div>
       <div class="hud"><span id="timer1">⏱️ 40 秒</span> <span id="score1">得分: 0</span></div>
-      <canvas id="gameCanvas" width="320" height="320"></canvas>
+      <canvas id="gameCanvas"></canvas>
     </div>
 
     <div id="leaderboard-screen" class="card hide">
       <div class="title-banner" id="leaderboard-title">關卡結算</div>
       <div class="score-display">累積總積分：<strong id="current-user-total">0</strong></div>
-      <button id="next-stage-btn" onclick="goToNextStage()" style="width: 100%; padding: 12px; background: #58D68D; color: white; border: none; border-radius: 5px;">進入下一關</button>
+      <button id="next-stage-btn" onclick="goToNextStage()">進入下一關</button>
     </div>
 
     <div id="game-stage2" class="card hide">
       <div class="stage-badge">關卡二：粽子估價王</div>
       <h3 id="stage2-title">第 1 / 5 題</h3>
-      <div class="img-box"><img id="stage2-img" src="" alt="粽子" style="max-width: 100%; height: 150px;"></div>
+      <div class="img-box"><img id="stage2-img" src="" alt="粽子" style="max-width: 100%; height: 160px;"></div>
       <h2 id="stage2-name">粽子名稱</h2>
       <div id="stage2-options"></div>
     </div>
@@ -50,8 +49,8 @@
 
     <div id="result-screen" class="card hide">
       <div class="title-banner">🏆 挑戰結束 🏆</div>
-      <div class="final-score">您的終極總分：<span id="res-final-total">0</span></div>
-      <p style="font-size: 14px; color: #666;">請截圖此畫面給主辦單位登記爭奪大獎！</p>
+      <div class="final-score" id="res-final-total">0</div>
+      <p>請截圖此畫面給主辦單位登記！</p>
     </div>
   </div>
   <script src="config.js"></script>
