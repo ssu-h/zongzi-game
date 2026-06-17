@@ -2,11 +2,11 @@ let score = 0, currentStage = 1, s2Idx = 0, s3Idx = 0, s1Timer = 40;
 let boatX = 130, items = [], canvas, ctx, gameLoop;
 
 const stage2Questions = [
-    { name: "【老協珍】鮑魚干貝粽", ans: 999, opts: [699, 999, 1299], img: "laoxiezhen.jpg" },
-    { name: "【星巴克】粽夏時光禮盒", ans: 600, opts: [400, 600, 800], img: "starbucks.jpg" },
-    { name: "【新東陽】多穀養生素粽", ans: 450, opts: [350, 450, 550], img: "xindongyang.jpeg" },
-    { name: "【鼎泰豐】湖州鮮肉粽禮盒", ans: 550, opts: [450, 550, 650], img: "dintaifung.jpeg" },
-    { name: "【黑橋牌】府城廟口粽禮盒", ans: 830, opts: [730, 830, 930], img: "heiqiao.jpg" }
+    { name: "【老協珍】鮑魚干貝粽", ans: 999, opts: [699, 999, 1299], img: "https://d3san4pg9xqi43.cloudfront.net/images/f6fcffa6-764c-4daf-8558-d2bf0a37319c.jpg" },
+    { name: "【星巴克】粽夏時光禮盒", ans: 600, opts: [400, 600, 800], img: "https://www.starbucks.com.tw/common/objects/images/cake/2026040216390598_62.jpg" },
+    { name: "【新東陽】多穀養生素粽", ans: 450, opts: [350, 450, 550], img: "https://img.91app.com/webapi/imagesV3/Original/SalePage/11709655/0/639168580315900000?v=1" },
+    { name: "【鼎泰豐】湖州鮮肉粽禮盒", ans: 550, opts: [450, 550, 650], img: "https://i4.momoshop.com.tw/1779428031/goodsimg/0015/290/277/spec/15290277_01_001_R.webp" },
+    { name: "【黑橋牌】府城廟口粽禮盒", ans: 830, opts: [730, 830, 930], img: "https://cdn-general.cybassets.com/media/W1siZiIsIjMyNTgwL3Byb2R1Y3RzLzU0ODUxNjUyLzE3NzY5MjMxMzBfZWNlZTJmZTE1YzRhYzI0MDJhOTMuanBlZyJdLFsicCIsInRodW1iIiwiNjAweDYwMCJdXQ.jpeg?sha=c91ea374e76e6cc1" }
 ];
 
 const stage3Questions = [
@@ -26,6 +26,7 @@ function startGame() {
     document.getElementById('start-screen').classList.add('hide');
     document.getElementById('game-stage1').classList.remove('hide');
     canvas = document.getElementById('gameCanvas');
+    canvas.width = 320; canvas.height = 320;
     ctx = canvas.getContext('2d');
     canvas.addEventListener('touchmove', (e) => { boatX = e.touches[0].clientX - 50; e.preventDefault(); }, {passive: false});
     canvas.addEventListener('mousemove', (e) => { boatX = e.clientX - 100; });
@@ -34,10 +35,10 @@ function startGame() {
 
 function update() {
     if(s1Timer <= 0) { clearInterval(gameLoop); showLeaderboardPage("第一關結束"); return; }
-    if(Math.random() < 0.15) items.push({x: Math.random() * 280, y: 0});
+    if(Math.random() < 0.1) items.push({x: Math.random() * 280, y: 0});
     ctx.clearRect(0, 0, 320, 320);
     items.forEach((item, i) => {
-        item.y += 8;
+        item.y += 6;
         ctx.fillStyle = '#27ae60'; ctx.fillRect(item.x, item.y, 20, 20);
         if(item.y > 270 && item.x > boatX - 20 && item.x < boatX + 70) { score += 10; items.splice(i, 1); document.getElementById('score1').innerText = "得分: " + score; }
     });
@@ -55,10 +56,9 @@ function showLeaderboardPage(msg) {
 }
 
 function goToNextStage() {
-    currentStage++;
     document.getElementById('leaderboard-screen').classList.add('hide');
-    if(currentStage === 2) { document.getElementById('game-stage2').classList.remove('hide'); renderS2(); }
-    else { document.getElementById('game-stage3').classList.remove('hide'); renderS3(); }
+    if(currentStage === 1) { currentStage = 2; document.getElementById('game-stage2').classList.remove('hide'); renderS2(); }
+    else { currentStage = 3; document.getElementById('game-stage3').classList.remove('hide'); renderS3(); }
 }
 
 function renderS2() {
