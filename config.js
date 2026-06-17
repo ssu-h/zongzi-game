@@ -1,6 +1,6 @@
-// ==========================================
-// 💡 關卡題目資料庫
-// ==========================================
+let score = 0, currentStage = 1, s2Idx = 0, s3Idx = 0, s1Timer = 40;
+let boatX = 130, items = [], canvas, ctx, gameLoop;
+
 const stage2Questions = [
     { name: "【老協珍】鮑魚干貝粽", ans: 999, opts: [699, 999, 1299], img: "laoxiezhen.jpg" },
     { name: "【星巴克】粽夏時光禮盒", ans: 600, opts: [400, 600, 800], img: "starbucks.jpg" },
@@ -22,46 +22,33 @@ const stage3Questions = [
     { q: "下列哪一個不是端午節的別稱？", options: ["端陽節", "重五節", "中元節"], ans: 2 }
 ];
 
-// --- 遊戲邏輯 ---
-let score = 0, currentStage = 1, s2Idx = 0, s3Idx = 0;
-let boatX = 130, canvas, ctx, s1Timer = 40;
-
 function startGame() {
     document.getElementById('start-screen').classList.add('hide');
     document.getElementById('game-stage1').classList.remove('hide');
-    initStage1();
-}
-
-function initStage1() {
     canvas = document.getElementById('gameCanvas');
     ctx = canvas.getContext('2d');
-    
-    // 綁定滑鼠/觸控移動
-    canvas.addEventListener('mousemove', (e) => {
-        const rect = canvas.getBoundingClientRect();
-        boatX = e.clientX - rect.left - 35;
-    });
-
-    // 簡單的遊戲迴圈
-    setInterval(() => {
-        if (s1Timer <= 0) {
-            showLeaderboardPage("第一關結束");
-            return;
-        }
-        s1Timer--;
-        document.getElementById('timer1').innerText = `⏱️ 剩餘時間: ${s1Timer} 秒`;
-        drawGame();
-    }, 1000);
+    canvas.addEventListener('touchmove', (e) => { boatX = e.touches[0].clientX - 50; e.preventDefault(); }, {passive: false});
+    canvas.addEventListener('mousemove', (e) => { boatX = e.clientX - 100; });
+    gameLoop = setInterval(update, 50);
 }
 
-function drawGame() {
+function update() {
+    if(s1Timer <= 0) { clearInterval(gameLoop); showLeaderboardPage("第一關結束"); return; }
+    if(Math.random() < 0.15) items.push({x: Math.random() * 280, y: 0});
     ctx.clearRect(0, 0, 320, 320);
-    ctx.fillStyle = '#58D68D'; // 龍舟顏色
-    ctx.fillRect(Math.max(0, Math.min(250, boatX)), 280, 70, 20);
+    items.forEach((item, i) => {
+        item.y += 8;
+        ctx.fillStyle = '#27ae60'; ctx.fillRect(item.x, item.y, 20, 20);
+        if(item.y > 270 && item.x > boatX - 20 && item.x < boatX + 70) { score += 10; items.splice(i, 1); document.getElementById('score1').innerText = "得分: " + score; }
+    });
+    ctx.fillStyle = '#58D68D'; ctx.fillRect(boatX, 290, 70, 20);
+    s1Timer -= 0.05; document.getElementById('timer1').innerText = "⏱️ " + Math.floor(s1Timer) + " 秒";
 }
 
 function showLeaderboardPage(msg) {
     document.getElementById('game-stage1').classList.add('hide');
+    document.getElementById('game-stage2').classList.add('hide');
+    document.getElementById('game-stage3').classList.add('hide');
     document.getElementById('leaderboard-screen').classList.remove('hide');
     document.getElementById('leaderboard-title').innerText = msg;
     document.getElementById('current-user-total').innerText = score;
@@ -69,46 +56,26 @@ function showLeaderboardPage(msg) {
 
 function goToNextStage() {
     currentStage++;
-    if(currentStage === 2) {
-        document.getElementById('leaderboard-screen').classList.add('hide');
-        document.getElementById('game-stage2').classList.remove('hide');
-        renderS2();
-    } else {
-        document.getElementById('leaderboard-screen').classList.add('hide');
-        document.getElementById('game-stage3').classList.remove('hide');
-        renderS3();
-    }
+    document.getElementById('leaderboard-screen').classList.add('hide');
+    if(currentStage === 2) { document.getElementById('game-stage2').classList.remove('hide'); renderS2(); }
+    else { document.getElementById('game-stage3').classList.remove('hide'); renderS3(); }
 }
 
 function renderS2() {
     const q = stage2Questions[s2Idx];
+    document.getElementById('stage2-title').innerText = `第 ${s2Idx + 1} / 5 題`;
     document.getElementById('stage2-name').innerText = q.name;
-    document.getElementById('stage2-img').src = q.img; // 請確保 GitHub 圖片路徑正確
-    let html = q.opts.map((o, i) => `<button class="choice-btn" onclick="checkS2(${i}, ${o === q.ans})">${o}</button>`).join('');
-    document.getElementById('stage2-options').innerHTML = html;
+    document.getElementById('stage2-img').src = q.img;
+    document.getElementById('stage2-options').innerHTML = q.opts.map(o => `<button class="choice-btn" onclick="checkS2(${o === q.ans})">${o}</button>`).join('');
 }
 
-function checkS2(idx, isCorrect) {
-    if(isCorrect) score += 100;
-    s2Idx++;
-    if(s2Idx < stage2Questions.length) renderS2();
-    else showLeaderboardPage("💰 估價王結束");
-}
+function checkS2(isCorrect) { if(isCorrect) score += 100; s2Idx++; if(s2Idx < stage2Questions.length) renderS2(); else showLeaderboardPage("估價王結束"); }
 
 function renderS3() {
     const q = stage3Questions[s3Idx];
+    document.getElementById('stage3-title').innerText = `第 ${s3Idx + 1} / 10 題`;
     document.getElementById('stage3-question').innerText = q.q;
-    let html = q.options.map((o, i) => `<button class="choice-btn" onclick="checkS3(${i === q.ans})">${o}</button>`).join('');
-    document.getElementById('stage3-options').innerHTML = html;
+    document.getElementById('stage3-options').innerHTML = q.options.map((o, i) => `<button class="choice-btn" onclick="checkS3(${i === q.ans})">${o}</button>`).join('');
 }
 
-function checkS3(isCorrect) {
-    if(isCorrect) score += 100;
-    s3Idx++;
-    if(s3Idx < stage3Questions.length) renderS3();
-    else {
-        document.getElementById('game-stage3').classList.add('hide');
-        document.getElementById('result-screen').classList.remove('hide');
-        document.getElementById('res-final-total').innerText = score;
-    }
-}
+function checkS3(isCorrect) { if(isCorrect) score += 100; s3Idx++; if(s3Idx < stage3Questions.length) renderS3(); else { document.getElementById('game-stage3').classList.add('hide'); document.getElementById('result-screen').classList.remove('hide'); document.getElementById('res-final-total').innerText = score; } }
