@@ -1,25 +1,351 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>端午全能挑戰賽</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>端午全能挑戰賽</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="game-container">
-        <div id="screen-home">
-            <h1>端午全能挑戰賽</h1>
-            <p>1️⃣ 龍舟接粽 (40秒)<br>2️⃣ 粽子估價王<br>3️⃣ 端午趣味答題 (50秒)</p>
-            <input type="text" id="username" placeholder="請輸入挑戰者姓名">
-            <button onclick="Game.init()">開始挑戰</button>
-        </div>
-        <div id="screen-game" class="hidden">
-            <div id="ui-bar">
-                玩家: <span id="p-name"></span> | 分數: <span id="p-score">0</span> | 時間: <span id="p-time">0</span>s
-            </div>
-            <div id="game-area"></div>
-        </div>
-    </div>
-    <script src="config.js"></script>
+
+<div class="container">
+
+<div id="home">
+
+<h1>歡迎參加端午全能挑戰賽！</h1>
+
+<h2>
+1️⃣ 龍舟接粽子<br><br>
+2️⃣ 粽子估價王<br><br>
+3️⃣ 端午趣味答題
+</h2>
+
+<h3>⚠️ 每人僅限挑戰一次</h3>
+
+<input id="playerName" placeholder="請輸入姓名">
+
+<br><br>
+
+<button onclick="startStage1()">開始挑戰</button>
+
+</div>
+
+<div id="stage1" style="display:none">
+
+<h1>第一關 龍舟接粽子</h1>
+
+<h2>剩餘時間：<span id="time1">40</span></h2>
+
+<canvas id="gameCanvas" width="700" height="500"></canvas>
+
+</div>
+
+<div id="stage2" style="display:none">
+<h1>第二關 粽子估價王</h1>
+
+<h2 id="priceNum"></h2>
+
+<img id="priceImg">
+
+<h3 id="priceTitle"></h3>
+
+<div id="priceOptions"></div>
+
+<h2 id="priceResult"></h2>
+
+</div>
+
+<div id="stage3" style="display:none">
+<h1>第三關 端午趣味答題</h1>
+
+<h2>剩餘時間：<span id="time3">50</span></h2>
+
+<h2 id="quizNum"></h2>
+
+<h3 id="quizTitle"></h3>
+
+<div id="quizOptions"></div>
+
+<h2 id="quizResult"></h2>
+
+</div>
+
+<div id="final" style="display:none">
+<h1>挑戰完成</h1>
+
+<h2 id="player"></h2>
+
+<h2 id="score1"></h2>
+<h2 id="score2"></h2>
+<h2 id="score3"></h2>
+
+<h1 id="total"></h1>
+
+</div>
+
+</div>
+
+<script src="config.js"></script>
+
+<script>
+
+let stage1Score=0;
+let stage2Score=0;
+let stage3Score=0;
+
+let canvas=document.getElementById("gameCanvas");
+let ctx=canvas.getContext("2d");
+
+let boatX=300;
+
+let zongzis=[];
+let rocks=[];
+
+document.addEventListener("keydown",e=>{
+if(e.key==="ArrowLeft") boatX-=25;
+if(e.key==="ArrowRight") boatX+=25;
+});
+
+function startStage1(){
+
+home.style.display="none";
+stage1.style.display="block";
+
+let time=40;
+
+let timer=setInterval(()=>{
+time--;
+time1.innerHTML=time;
+
+if(time<=0){
+clearInterval(timer);
+clearInterval(gameLoop);
+
+stage1.style.display="none";
+startStage2();
+}
+
+},1000);
+
+gameLoop=setInterval(drawGame,30);
+
+}
+
+function drawGame(){
+
+ctx.clearRect(0,0,700,500);
+
+ctx.fillStyle="brown";
+ctx.fillRect(boatX,450,100,30);
+
+if(Math.random()<0.03){
+zongzis.push({
+x:Math.random()*650,
+y:0
+});
+}
+
+if(Math.random()<0.02){
+rocks.push({
+x:Math.random()*650,
+y:0
+});
+}
+
+ctx.fillStyle="green";
+
+zongzis.forEach(z=>{
+
+z.y+=5;
+
+ctx.beginPath();
+ctx.arc(z.x,z.y,15,0,2*Math.PI);
+ctx.fill();
+
+if(z.y>440 && z.x>boatX && z.x<boatX+100){
+stage1Score+=10;
+z.y=600;
+}
+
+});
+
+ctx.fillStyle="red";
+
+rocks.forEach(r=>{
+
+r.y+=6;
+
+ctx.fillRect(r.x,r.y,25,25);
+
+if(r.y>440 && r.x>boatX && r.x<boatX+100){
+stage1Score-=5;
+r.y=600;
+}
+
+});
+
+ctx.font="24px Arial";
+ctx.fillText("分數："+stage1Score,20,40);
+
+}
+
+let priceIndex=0;
+
+function startStage2(){
+
+stage2.style.display="block";
+
+showPrice();
+
+}
+
+function showPrice(){
+
+if(priceIndex>=5){
+
+stage2.style.display="none";
+startStage3();
+return;
+}
+
+let q=priceQuestions[priceIndex];
+
+priceNum.innerHTML="第 "+(priceIndex+1)+" 題";
+
+priceImg.src=q.image;
+
+priceTitle.innerHTML=q.name;
+
+priceOptions.innerHTML="";
+priceResult.innerHTML="";
+
+q.options.forEach(op=>{
+
+priceOptions.innerHTML+=`
+<button class='optionBtn'
+onclick='checkPrice("${op}")'>
+$${op}
+</button>
+`;
+
+});
+
+}
+
+function checkPrice(op){
+
+let q=priceQuestions[priceIndex];
+
+if(op===q.answer){
+stage2Score+=20;
+}
+
+priceResult.innerHTML=
+"正確答案：$"+q.answer;
+
+setTimeout(()=>{
+priceIndex++;
+showPrice();
+},1500);
+
+}
+
+let quizIndex=0;
+
+function startStage3(){
+
+stage3.style.display="block";
+
+let time=50;
+
+let timer=setInterval(()=>{
+
+time--;
+time3.innerHTML=time;
+
+if(time<=0){
+clearInterval(timer);
+finishGame();
+}
+
+},1000);
+
+showQuiz();
+
+}
+
+function showQuiz(){
+
+if(quizIndex>=10){
+finishGame();
+return;
+}
+
+let q=quizQuestions[quizIndex];
+
+quizNum.innerHTML="第 "+(quizIndex+1)+" 題";
+
+quizTitle.innerHTML=q.q;
+
+quizOptions.innerHTML="";
+quizResult.innerHTML="";
+
+q.options.forEach(op=>{
+
+quizOptions.innerHTML+=`
+<button class='optionBtn'
+onclick='checkQuiz("${op}")'>
+${op}
+</button>
+`;
+
+});
+
+}
+
+function checkQuiz(op){
+
+let q=quizQuestions[quizIndex];
+
+if(op===q.answer){
+stage3Score+=10;
+}
+
+quizResult.innerHTML=
+"正確答案："+q.answer;
+
+setTimeout(()=>{
+
+quizIndex++;
+
+showQuiz();
+
+},1000);
+
+}
+
+function finishGame(){
+
+stage3.style.display="none";
+final.style.display="block";
+
+player.innerHTML=
+document.getElementById("playerName").value;
+
+score1.innerHTML=
+"第一關："+stage1Score;
+
+score2.innerHTML=
+"第二關："+stage2Score;
+
+score3.innerHTML=
+"第三關："+stage3Score;
+
+total.innerHTML=
+"總分："+(stage1Score+stage2Score+stage3Score);
+
+}
+
+</script>
+
 </body>
 </html>
