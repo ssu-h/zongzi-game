@@ -1,32 +1,76 @@
-// ==========================================
-// 💡 題目資料庫 (已更新第二關價格)
-// ==========================================
+const Game = {
+    score: 0, name: "", time: 0,
+    products: [
+        { name: "老協珍 鮑魚干貝粽", price: 999, img: "laoxiezhen.jpg" },
+        { name: "星巴克 粽夏時光禮盒", price: 600, img: "starbucks.jpg" },
+        { name: "新東陽 多穀養生素粽", price: 450, img: "xindongyang.jpeg" },
+        { name: "鼎泰豐 湖州鮮肉粽", price: 550, img: "dintaifung.jpeg" },
+        { name: "黑橋牌 府城廟口粽", price: 830, img: "heiqiao.jpg" }
+    ],
+    questions: [
+        { q: "端午節的起源與誰有關？", o: ["屈原", "李白", "杜甫"], a: 0 },
+        { q: "端午避邪植物？", o: ["艾草", "玫瑰", "茉莉"], a: 0 },
+        { q: "端午習俗？", o: ["立蛋", "放風箏", "吃湯圓"], a: 0 },
+        { q: "端午日期？", o: ["五月五", "六月六", "四月四"], a: 0 },
+        { q: "划龍舟目的？", o: ["紀念屈原", "比賽游泳", "慶祝生日"], a: 0 },
+        { q: "雄黃酒作用？", o: ["避邪", "增高", "美白"], a: 0 },
+        { q: "粽子外層？", o: ["竹葉", "報紙", "鋁箔"], a: 0 },
+        { q: "端午別稱？", o: ["五日節", "中秋節", "過年"], a: 0 },
+        { q: "立蛋時間？", o: ["正午", "午夜", "日落"], a: 0 },
+        { q: "龍舟比賽幾人划？", o: ["多人", "一人", "無限制"], a: 0 }
+    ],
 
-const stage2Questions = [
-  { id: 1, name: "【老協珍】鮑魚干貝粽 (2入)", options: ["NT$ 899", "NT$ 999", "NT$ 1099"], ans: 1, img: "https://d3san4pg9xqi43.cloudfront.net/images/f6fcffa6-764c-4daf-8558-d2bf0a37319c.jpg" },
-  { id: 2, name: "【星巴克】粽夏時光禮盒 (8入)", options: ["NT$ 500", "NT$ 600", "NT$ 700"], ans: 1, img: "https://www.starbucks.com.tw/common/objects/images/cake/2026040216390598_62.jpg" },
-  { id: 3, name: "【新東陽】多穀養生素粽 (全素 5入)", options: ["NT$ 350", "NT$ 450", "NT$ 550"], ans: 1, img: "https://img.91app.com/webapi/imagesV3/Original/SalePage/11709655/0/639168580315900000?v=1" },
-  { id: 4, name: "【鼎泰豐】湖州鮮肉粽禮盒 (5入)", options: ["NT$ 450", "NT$ 550", "NT$ 650"], ans: 1, img: "https://www.dintaifung.com.tw/upload/product/20240417101736932.jpg" },
-  { id: 5, name: "【黑橋牌】府城廟口粽禮盒 (8入)", options: ["NT$ 730", "NT$ 830", "NT$ 930"], ans: 1, img: "https://cdn-general.cybassets.com/media/W1siZiIsIjMyNTgwL3Byb2R1Y3RzLzU0ODUxNjUyLzE3NzY5MjMxMzBfZWNlZTJmZTE1YzRhYzI0MDJhOTMuanBlZyJdLFsicCIsInRodW1iIiwiNjAweDYwMCJdXQ.jpeg?sha=c91ea374e76e6cc1" }
-];
+    init() {
+        this.name = document.getElementById('username').value;
+        if (!this.name) return alert("請輸入姓名");
+        document.getElementById('screen-home').classList.add('hidden');
+        document.getElementById('screen-game').classList.remove('hidden');
+        document.getElementById('p-name').innerText = this.name;
+        this.startLevel1();
+    },
 
-const stage3Questions = [
-  { q: "端午節是農曆的哪一天？", options: ["五月初五", "五月十五", "六月初五"], ans: 0 },
-  { q: "「屈原」是歷史上哪一個時期的人？", options: ["秦朝", "戰國時期", "漢朝"], ans: 1 },
-  { q: "端午節喝雄黃酒、掛艾草主要是為了？", options: ["求發財", "驅邪避毒", "慶祝豐收"], ans: 1 },
-  { q: "一般來說，哪一種粽子在製作時會先把米炒熟？", options: ["北部粽", "南部粽", "鹼粽"], ans: 0 },
-  { q: "傳統上，端午節當天中午流行玩什麼活動？", options: ["放天燈", "立蛋", "猜燈謎"], ans: 1 },
-  { q: "屈原投江的地方是哪一條江？", options: ["長江", "汨羅江", "黃河"], ans: 1 },
-  { q: "劃龍舟的傳統最初是為了做什麼？", options: ["打撈屈原的遺體", "好玩比賽", "載貨運河"], ans: 0 },
-  { q: "包肉粽常用的「鹹蛋黃」通常是用什麼蛋做的？", options: ["雞蛋", "鴨蛋", "鵪鶉蛋"], ans: 1 },
-  { q: "鹼粽沾上什麼東西是台灣傳統常見的吃法？", options: ["醬油膏", "砂糖或蜂蜜", "辣椒醬"], ans: 1 },
-  { q: "下列哪一個不是端午節的別稱？", options: ["端陽節", "重五節", "中元節"], ans: 2 }
-];
+    // 關卡一：龍舟
+    startLevel1() {
+        let area = document.getElementById('game-area');
+        area.innerHTML = '<div id="boat" class="boat" style="left:50%">龍舟</div>';
+        this.time = 40;
+        let boat = document.getElementById('boat');
+        window.onkeydown = (e) => {
+            let l = parseInt(boat.style.left);
+            if (e.key === 'ArrowLeft' && l > 0) boat.style.left = (l - 5) + "%";
+            if (e.key === 'ArrowRight' && l < 90) boat.style.left = (l + 5) + "%";
+        };
+        let timer = setInterval(() => {
+            document.getElementById('p-time').innerText = this.time;
+            if (this.time-- <= 0) { clearInterval(timer); this.startLevel2(0); }
+        }, 1000);
+    },
 
-// 核心邏輯保持不變...
-let pName = ""; let s1Score = 0; let s2Score = 0; let s3CorrectCount = 0; let userTotalScore = 0; let currentStageNum = 1; let s2CurrentIdx = 0; let s3CurrentIdx = 0; let isAllowClick = true; 
+    // 關卡二：估價
+    startLevel2(idx) {
+        if (idx >= this.products.length) return this.startLevel3(0);
+        let p = this.products[idx];
+        document.getElementById('game-area').innerHTML = `<h3>第二關：估價王</h3><img src="${p.img}" width="150"><p>${p.name}</p>
+            <button class="option-btn" onclick="Game.checkPrice(${p.price}, ${p.price}, ${idx})">$${p.price}</button>
+            <button class="option-btn" onclick="Game.checkPrice(0, ${p.price}, ${idx})">$${p.price - 100}</button>`;
+    },
+    checkPrice(val, correct, idx) {
+        if (val === correct) this.score += 20;
+        alert(val === correct ? "答對了！" : "錯了！正確是 $" + correct);
+        this.startLevel2(idx + 1);
+    },
 
-function showScreen(id) { ['start-screen', 'game-stage1', 'leaderboard-screen', 'game-stage2', 'game-stage3', 'result-screen'].forEach(s => { document.getElementById(s).classList.add('hide'); }); document.getElementById(id).classList.remove('hide'); }
-function startGame() { const input = document.getElementById('player-name').value.trim(); if(!input) return alert('請輸入您的姓名才能開始比賽！'); pName = input; showScreen('game-stage1'); initStage1(); }
-
-// ... (後續函數邏輯與前次一致，請維持您原本檔案中的函數內容)
+    // 關卡三：答題
+    startLevel3(idx) {
+        if (idx >= 10) return alert("挑戰結束！總分：" + this.score);
+        let q = this.questions[idx];
+        let html = `<h3>第三關：趣味答題</h3><p>${q.q}</p>`;
+        q.o.forEach((opt, i) => html += `<button class="option-btn" onclick="Game.checkQ(${i}, ${q.a}, ${idx})">${opt}</button>`);
+        document.getElementById('game-area').innerHTML = html;
+    },
+    checkQ(val, ans, idx) {
+        if (val === ans) this.score += 10;
+        alert(val === ans ? "正確！" : "錯誤！");
+        this.startLevel3(idx + 1);
+    }
+};
