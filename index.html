@@ -3,20 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>🎋 端午全能挑戰賽 🎋</title>
+  <title>🎋 端午一粽值千金 🎋</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container">
     <div id="start-screen" class="card">
-      <div class="title-banner">🎋 端午全能挑戰賽 🎋</div>
+      <div class="title-banner">🎋 一粽值千金 🎋</div>
+      <p class="intro-text">
+        歡迎參加端午全能挑戰賽！本遊戲共有三大關卡：<br>
+        1️⃣ <b>龍舟接粽子</b><br>
+        2️⃣ <b>粽子估價王</b><br>
+        3️⃣ <b>端午趣味答題</b><br>
+        ⚠️ <b>注意：每人僅限挑戰一次！</b>
+      </p>
       <input type="text" id="player-name" placeholder="請輸入您的姓名">
       <button onclick="startGame()">開始挑戰</button>
     </div>
 
     <div id="game-stage1" class="card hide">
       <div class="stage-badge">關卡一：龍舟接粽子</div>
-      <div style="display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 10px;">
+      <div class="hud">
         <span id="timer1">⏱️ 剩餘時間: 40 秒</span>
         <span id="score1">得分: 0</span>
       </div>
@@ -25,21 +32,21 @@
 
     <div id="leaderboard-screen" class="card hide">
       <div class="title-banner" id="leaderboard-title">📊 關卡結算</div>
-      <div style="padding: 12px; font-size: 18px;">總分：<strong id="current-user-total">0</strong></div>
+      <div class="score-display">您的當前總積分：<strong id="current-user-total">0</strong> 分</div>
       <button id="next-stage-btn" onclick="goToNextStage()">進入下一關</button>
     </div>
 
     <div id="game-stage2" class="card hide">
       <div class="stage-badge">關卡二：粽子估價王</div>
       <h3 id="stage2-title">第 1 / 5 題</h3>
-      <div class="img-box"><img id="stage2-img" src="" alt="粽子" style="width:100%; height:150px; object-fit:contain;"></div>
+      <div class="img-box"><img id="stage2-img" src="" alt="粽子"></div>
       <h2 id="stage2-name">粽子名稱</h2>
       <div id="stage2-options"></div>
     </div>
 
     <div id="game-stage3" class="card hide">
       <div class="stage-badge">關卡三：端午趣味答題</div>
-      <div style="display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 10px;">
+      <div class="hud">
         <span id="timer3">⏱️ 剩餘時間: 50 秒</span>
         <span id="stage3-title">第 1 / 10 題</span>
       </div>
@@ -48,9 +55,9 @@
     </div>
 
     <div id="result-screen" class="card hide">
-      <div class="title-banner">🏆 挑戰完成 🏆</div>
-      <h2 id="result-welcome"></h2>
-      <div style="font-size: 40px; color: #e74c3c; margin: 20px 0;" id="res-final-total">0</div>
+      <div class="title-banner">🏆 挑戰結束 🏆</div>
+      <div class="final-score">總得分：<span id="res-final-total">0</span></div>
+      <p>請截圖此畫面給主辦單位登記！</p>
     </div>
   </div>
   <script src="config.js"></script>
