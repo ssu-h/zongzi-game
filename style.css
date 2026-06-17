@@ -1,65 +1,99 @@
-body{
-background:#f7f4df;
-font-family:微軟正黑體;
-text-align:center;
-margin:0;
-color:#355c3d;
+:root {
+    --primary: #5a8a6e;      /* 文青深綠 */
+    --secondary: #d4a373;    /* 大地色/黃褐 */
+    --accent: #e9c46a;       /* 明亮黃 */
+    --bg-color: #fefcf5;     /* 米白底色 */
+    --text-color: #4a4a4a;   /* 深灰文字 */
 }
 
-.container{
-max-width:800px;
-margin:auto;
-padding:20px;
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
-h1{
-color:#698b22;
+.container {
+    width: 90%;
+    max-width: 400px;
 }
 
-button{
-background:#d9b44a;
-border:none;
-padding:15px 25px;
-border-radius:10px;
-font-size:18px;
-margin:8px;
-cursor:pointer;
+.card {
+    background: #fff;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    border: 1px solid #eee;
+    text-align: center;
 }
 
-button:hover{
-background:#c49a1c;
+.hide { display: none; }
+
+.title-banner {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--primary);
+    margin-bottom: 20px;
+    border-bottom: 2px dashed var(--secondary);
+    padding-bottom: 10px;
 }
 
-input{
-padding:12px;
-font-size:18px;
-width:220px;
-border-radius:8px;
+.stage-badge {
+    background: var(--primary);
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    display: inline-block;
+    margin-bottom: 15px;
+    font-size: 14px;
 }
 
-#gameCanvas{
-background:#fff;
-border:3px solid #698b22;
+input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-size: 16px;
 }
 
-.optionBtn{
-display:block;
-width:300px;
-margin:10px auto;
+button {
+    width: 100%;
+    padding: 12px;
+    background: var(--secondary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
 }
 
-img{
-width:250px;
-border-radius:15px;
+button:hover {
+    background: #c18e5e;
 }
 
-.correct{
-color:green;
-font-size:22px;
-font-weight:bold;
+.img-box {
+    margin: 10px 0;
+    background: #fdfdfd;
+    padding: 10px;
+    border-radius: 10px;
 }
 
-.score{
-font-size:24px;
-margin-top:20px;
+.rank-list {
+    margin-top: 10px;
+    text-align: left;
+}
+
+.rank-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px;
+    border-bottom: 1px solid #f0f0f0;
 }
