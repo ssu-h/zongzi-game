@@ -334,6 +334,6 @@ function endStage3() {
       <span class="final-highlight">${userTotalScore} 分</span>
     </div>
     <div class="host-hint">
-      📢 本次約有 50 人同場競賽！請向現場福委會或主持人報上您的姓名與總分，即可手動更新排行榜大螢幕！
+      📢 請向現場福委會或主持人報上您的姓名與總分，即可手動更新排行榜大螢幕！
     </div>`;
 }
