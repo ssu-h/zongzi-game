@@ -1,16 +1,8 @@
-:root {
-  --primary: #2c3e50;
-  --secondary: #27ae60;
-  --accent: #e67e22;
-}
-body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
-.container { width: 90%; max-width: 400px; text-align: center; }
-.card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-.hide { display: none; }
-.title-banner { font-size: 24px; font-weight: bold; color: var(--primary); margin-bottom: 20px; }
-.stage-badge { background: var(--primary); color: white; padding: 5px 10px; border-radius: 20px; font-size: 14px; display: inline-block; margin-bottom: 15px; }
-input { width: 100%; padding: 12px; box-sizing: border-box; margin-bottom: 15px; border: 2px solid #ddd; border-radius: 8px; }
-button { width: 100%; padding: 12px; background: var(--secondary); color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; }
-.img-box { margin-bottom: 15px; }
-.rank-list { text-align: left; margin-top: 10px; }
-.rank-item { padding: 8px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; }
+:root { --bg: #fffcf0; --green: #556b2f; --yellow: #f4d03f; }
+body { background: var(--bg); color: #333; font-family: sans-serif; text-align: center; }
+#game-container { width: 90%; max-width: 500px; margin: 30px auto; background: white; padding: 20px; border: 2px solid var(--green); border-radius: 15px; }
+.hidden { display: none; }
+#game-area { height: 400px; position: relative; overflow: hidden; margin: 20px 0; border: 1px solid #ccc; background: #eef; }
+.boat { position: absolute; bottom: 10px; width: 60px; height: 30px; background: var(--green); color: white; border-radius: 5px; }
+.obstacle { position: absolute; width: 30px; height: 30px; background: red; }
+.option-btn { display: block; width: 80%; margin: 8px auto; padding: 10px; cursor: pointer; border: 1px solid var(--green); }
