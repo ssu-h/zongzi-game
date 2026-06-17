@@ -1,82 +1,25 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>🎋 端午一粽值千金 🎋</title>
-  <link rel="stylesheet" href="style.css">
-  <style>
-    /* 防止手機雙擊放大與瀏覽器預設下拉整理 */
-    html, body { touch-action: none; overflow: hidden; position: fixed; width: 100%; height: 100%; }
-    .choice-btn { background:#fff; color:var(--primary); border:2px solid var(--primary); text-align:left; padding:12px; font-size:16px; border-radius:8px; cursor:pointer; width:100%; transition: all 0.2s; margin-bottom: 10px; }
-    
-    /* 答題回饋動態樣式 */
-    .choice-btn.correct { background-color: #2ecc71 !important; color: white !important; border-color: #27ae60 !important; font-weight: bold; }
-    .choice-btn.wrong { background-color: #e74c3c !important; color: white !important; border-color: #c0392b !important; opacity: 0.6; }
-  </style>
+    <meta charset="UTF-8">
+    <title>端午全能挑戰賽</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    
-    <div id="start-screen" class="card">
-      <div class="title-banner">🎋 一粽值千金 🎋</div>
-      <p style="font-size: 16px; line-height: 1.8; text-align: left; background: #fffde7; padding: 15px; border-radius: 8px; border-left: 4px solid var(--secondary); margin-bottom: 20px;">
-        歡迎參加端午全能挑戰賽！本遊戲共有三大關卡：<br>
-        1️⃣ <b>龍舟接粽子</b><br>
-        2️⃣ <b>粽子估價王</b><br>
-        3️⃣ <b>端午趣味答題</b><br>
-        ⚠️ <b>注意：每人僅限挑戰一次！</b>
-      </p>
-      <input type="text" id="player-name" placeholder="請輸入您的姓名">
-      <button onclick="startGame()">開始挑戰</button>
+    <div id="game-container">
+        <div id="screen-home">
+            <h1>端午全能挑戰賽</h1>
+            <p>1️⃣ 龍舟接粽 (40秒)<br>2️⃣ 粽子估價王<br>3️⃣ 端午趣味答題 (50秒)</p>
+            <input type="text" id="username" placeholder="請輸入挑戰者姓名">
+            <button onclick="Game.init()">開始挑戰</button>
+        </div>
+        <div id="screen-game" class="hidden">
+            <div id="ui-bar">
+                玩家: <span id="p-name"></span> | 分數: <span id="p-score">0</span> | 時間: <span id="p-time">0</span>s
+            </div>
+            <div id="game-area"></div>
+        </div>
     </div>
-
-    <div id="game-stage1" class="card hide">
-      <div class="stage-badge">關卡一：龍舟接粽子</div>
-      <div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: bold;">
-        <span id="timer1">⏱️ 剩餘時間: 50 秒</span>
-        <span id="score1">得分: 0</span>
-      </div>
-      <canvas id="gameCanvas" width="320" height="320" style="background: #e3f2fd; border: 2px solid var(--primary); border-radius: 8px; width: 100%; max-width: 320px;"></canvas>
-    </div>
-
-    <div id="leaderboard-screen" class="card hide">
-      <div class="title-banner" id="leaderboard-title">📊 關卡結算</div>
-      <div style="background: #f9f9f9; padding: 12px; border-radius: 8px; margin-bottom: 15px; font-size: 16px;">
-        您的當前總積分：<strong id="current-user-total" style="color: var(--accent); font-size: 22px;">0</strong> 分
-      </div>
-      <button id="next-stage-btn" onclick="goToNextStage()" style="background: var(--primary);">進入下一關卡 🚀</button>
-    </div>
-
-    <div id="game-stage2" class="card hide">
-      <div class="stage-badge">關卡二：粽子估價王</div>
-      <h3 id="stage2-title">第 1 / 5 題</h3>
-      <div class="img-box"><img id="stage2-img" src="" alt="粽子" style="max-height: 160px; object-fit: contain;"></div>
-      <h2 id="stage2-name" style="font-size: 18px; margin-bottom: 10px;">粽子名稱</h2>
-      <div id="stage2-options"></div>
-    </div>
-
-    <div id="game-stage3" class="card hide">
-      <div class="stage-badge">關卡三：端午趣味答題</div>
-      <div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: bold;">
-        <span id="timer3">⏱️ 剩餘時間: 60 秒</span>
-        <span id="stage3-title">第 1 / 10 題</span>
-      </div>
-      <h2 id="stage3-question" style="font-size: 19px; margin-bottom: 20px;">問題載入中...</h2>
-      <div id="stage3-options"></div>
-    </div>
-
-    <div id="result-screen" class="card hide">
-      <div class="title-banner">🏆 榮耀終點站 🏆</div>
-      <h2 id="result-welcome" style="color: var(--secondary);"></h2>
-      <div style="background: #fffde7; padding: 20px; border-radius: 10px; border: 2px solid var(--secondary);">
-        <div style="font-size: 20px; font-weight: bold; color: #2c3e50;">您的終極總分</div>
-        <div style="font-size: 42px; font-weight: bold; color: #e74c3c;" id="res-final-total">0</div>
-      </div>
-      <p style="font-size: 14px; color: #7f8c8d; margin-top: 20px;">🎉 請截圖本畫面回傳登記！</p>
-    </div>
-
-  </div>
-  <script src="config.js"></script>
+    <script src="config.js"></script>
 </body>
 </html>
