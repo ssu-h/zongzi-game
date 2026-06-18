@@ -334,6 +334,6 @@ function endStage3() {
       <span class="final-highlight">${userTotalScore} 分</span>
     </div>
     <div class="host-hint">
-      📢 請截圖您的手機畫面含時間、姓名與總分，稍後即將公布排行榜！
+      📢 請截圖您的手機畫面含時間、姓名與總分上傳群組，稍後即將公布排行榜！
     </div>`;
 }
